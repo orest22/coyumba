@@ -1,5 +1,5 @@
 {
-  "name": "CoYumba Bot",
+  "name": "coyumba-bot",
   "version": "0.0.2",
   "description": "Slack bot for yumba",
   "main": "bot.js",
