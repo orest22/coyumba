@@ -1,10 +1,13 @@
 {
-  "name": "botkit-starter-slack",
+  "name": "CoYumba Bot",
   "version": "0.0.2",
-  "description": "A starter kit for building a custom Slack bot with Botkit Studio",
+  "description": "Slack bot for yumba",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
+  },
+  "engines": {
+    "node": "8.9.0"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
@@ -22,17 +25,17 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/howdyai/botkit-starter-slack.git"
+    "url": "https://github.com/orest22/coyumba.git"
   },
   "bugs": {
-    "url": "https://github.com/howdyai/botkit-starter-slack/issues"
+    "url": "https://github.com/orest22/coyumba/issues"
   },
-  "homepage": "https://github.com/howdyai/botkit-starter-slack",
+  "homepage": "https://github.com/orest22/coyumba",
   "keywords": [
     "bots",
     "chatbots",
     "slack"
   ],
-  "author": "ben@howdy.ai",
+  "author": "oresthazda@gmail.com",
   "license": "ISC"
 }
