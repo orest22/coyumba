@@ -52,7 +52,11 @@ This bot demonstrates many of the core features of Botkit:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var env = require('node-env-file');
-env(__dirname + '/.env');
+try {
+    env(__dirname + '/.env');
+} catch (error) {
+    console.log('Error: No Env File. Use global variables')
+}
 
 
 if (!process.env.clientId || !process.env.clientSecret || !process.env.PORT) {
