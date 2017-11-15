@@ -3,6 +3,7 @@
 Botkit Studio Skill module to enhance the "Menu" script
 
 */
+const menuScrapper = require('../components/menuScrapper');
 
 
 module.exports = function(controller) {
@@ -14,11 +15,48 @@ module.exports = function(controller) {
         // do some preparation before the conversation starts...
         // for example, set variables to be used in the message templates
         // convo.setVar('foo','bar');
-
+        
         console.log('BEFORE: Menu');
-        // don't forget to call next, or your conversation will never continue.
-        next();
+        menuScrapper.getMenuImage().then((screenshotName) => {
+            console.log('Got The Image');
+            convo.setVar('screenshot', encodeURI(`${process.env.URL}/images/menu/${screenshotName}`));
+            next();
+        });
+        
 
+        // don't forget to call next, or your conversation will never continue.
+        //next();
+
+    });
+
+    controller.hears(['testMenu'], 'direct_message,direct_mention', function(bot, message) {
+
+        try {
+
+            menuScrapper.getMenuImage().then((screenshotName) => {
+                console.log('Got The Image');
+                const link = `${process.env.URL}/images/menu/${screenshotName}`;
+                
+                bot.reply(message, {
+                    text: null,
+                    "attachments": [
+                        {
+                            "fallback": "Required plain-text summary of the attachment.",
+                            "color": "#36a64f",
+                            "title": "New Yumba Menu",
+                            "title_link": link,
+                            "text": "Checkout new Yumba menu.",
+                            "image_url": link,
+                            "footer": "CoYumba"
+                        }
+                    ]
+                })
+            });
+            
+        } catch (error) {
+            console.log(error);
+        }
+        
     });
 
     /* Validators */
