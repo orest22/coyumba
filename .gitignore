@@ -1,5 +1,5 @@
 .data
 node_modules
 components/routes/_*
-public/images/menu/*
+public/images/menu/*.jpeg
 .env
