@@ -1,26 +1,29 @@
 const puppeteer = require('puppeteer');
 
 async function getMenuImage() {
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    const page = await browser.newPage();
-    let fileName = '';
-
-    page.setViewport({
-        width: 1280,
-        height: 800,
-        deviceScaleFactor: 2,
-    });
-    await page.goto('https://yumba.ca/#/on-the-menu');
-    const menuElement = await page.$('.meals-grid-wrapper');
-    const navigation = await page.$eval('.navbar', el => {
-        el.style.display = 'none';
-    });
-
-    const container = await page.$eval('.section', el => {el.style.padding = '20px'});
-
     try {
+
+        const browser = await puppeteer.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
+        const page = await browser.newPage();
+        let fileName = '';
+    
+        page.setViewport({
+            width: 1280,
+            height: 800,
+            deviceScaleFactor: 2,
+        });
+    
+        await page.goto('https://yumba.ca/#/on-the-menu');
+        const menuElement = await page.$('.meals-grid-wrapper');
+        const navigation = await page.$eval('.navbar', el => {
+            el.style.display = 'none';
+        });
+    
+        const container = await page.$eval('.section', el => {el.style.padding = '20px'});
+        
+    
         console.log("Create screen shot");
         fileName = `menu-${new Date().getTime()}.jpeg`;
         await menuElement.screenshot({
@@ -28,14 +31,16 @@ async function getMenuImage() {
             quality: 80,
             type: 'jpeg'
         });
+    
+        await browser.close().then(() => {
+            console.log('closed');
+        });
+    
+        return fileName;
+
     } catch (error) {
         console.log(`Error: When taking screenshot. ${error}`);
     }
-  
-    await browser.close().then(() => {
-        console.log('closed');
-    });
-    return fileName;
 };
 
 module.exports = {
