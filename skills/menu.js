@@ -30,7 +30,7 @@ module.exports = function(controller) {
     controller.hears(['Menu'], 'direct_message,direct_mention', function(bot, message) {
 
         try {
-            bot.startTyping();
+            bot.startTyping(message);
             menuScrapper.getMenuImage().then((screenshotName) => {
                 console.log('Got The Image');
                 const link = `${process.env.URL}images/menu/${screenshotName}`;
