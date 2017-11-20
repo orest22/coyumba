@@ -191,6 +191,8 @@ module.exports = function(controller) {
                 // append user name to selected row.
                 if (index === selectedRow) {
                     item.indexOf('>>>') > -1 ? newMessage.push(`${item}, <@${user}>`) : newMessage.push(`${item} >>> <@${user}>`)
+                } else {
+                    newMessage.push(item);
                 }
             });
 
