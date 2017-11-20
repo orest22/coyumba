@@ -26,15 +26,32 @@ module.exports = function(controller) {
             // get menu array
             menuScrapper.getMenuList().then( respose => {
                 let text = "";
+                let actions = [];
 
                 respose.forEach((menuItem, index) => {
-                    text += `*${index+1}* ${menuItem}. \n`;
+                    const number = index + 1;
+                    text += `*${number}.* ${menuItem}. \n`;
+                    actions.push({
+                        "name": number,
+                        "text": number,
+                        "value": number,
+                        "type": "button",
+                    });
                 });
 
                 // Send menu list
                 bot.reply(message, {
                     text: text,
+                    attachment_type: 'default',
                     mrkdwn: true,
+                    attachments:[
+                        {
+                            title: 'Make your choice from list above',
+                            callback_id: 'selectMenuItem',
+                            attachment_type: 'default',
+                            actions: actions,
+                        }
+                    ]
                 });
             });
            
@@ -142,5 +159,14 @@ module.exports = function(controller) {
 
         // don't forget to call next, or your conversation will never properly complete.
         next();
+    });
+
+    // receive an interactive message, and reply with a message that will replace the original
+    controller.on('interactive_message_callback', function(bot, message) {
+        
+        // check message.actions and message.callback_id to see what action to take...
+        if(message.callback_id === 'selectMenuItem') {
+            console.log(message);
+        }
     });
 }
