@@ -50,6 +50,8 @@ async function getMenuList() {
     
             return data; // Return our data array
         });
+
+        return result;
     } catch (error) {
         console.log(`Error: When getting image list. (${error})`);
     }
