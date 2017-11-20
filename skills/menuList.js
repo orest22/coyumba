@@ -198,6 +198,7 @@ module.exports = function(controller) {
 
             bot.replyInteractive(message, {
                 text: newMessage.join('\n'),
+                mrkdwn: true,                
                 attachments:[
                     {
                         title: 'Make your choice from list above.',
