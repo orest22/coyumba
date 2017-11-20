@@ -17,19 +17,17 @@ module.exports = function(controller) {
         // convo.setVar('foo','bar');
         
         console.log('BEFORE: Menu');
-        menuScrapper.getMenuImage().then((screenshotName) => {
-            console.log('Got The Image');
-            convo.setVar('screenshot', encodeURI(`${process.env.URL}/images/menu/${screenshotName}`));
-            next();
+        bot.reply(message, {
+            text: 'Fetching menu image...'
         });
         
 
         // don't forget to call next, or your conversation will never continue.
-        //next();
+        next();
 
     });
 
-    controller.hears(['testMenu'], 'direct_message,direct_mention', function(bot, message) {
+    controller.hears(['Menu'], 'direct_message,direct_mention', function(bot, message) {
 
         try {
 
@@ -50,7 +48,7 @@ module.exports = function(controller) {
                             "footer": "CoYumba"
                         }
                     ]
-                })
+                });
             });
             
         } catch (error) {
