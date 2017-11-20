@@ -201,7 +201,7 @@ module.exports = function(controller) {
                         title: 'Make your choice from list above.',
                         callback_id: 'selectMenuItem',
                         attachment_type: 'default',
-                        actions: actions,
+                        actions: newActions,
                     }
                 ]
             });
