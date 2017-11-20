@@ -46,7 +46,7 @@ module.exports = function(controller) {
                     mrkdwn: true,
                     attachments:[
                         {
-                            title: 'Make your choice from list above',
+                            title: 'Make your choice from list above.',
                             callback_id: 'selectMenuItem',
                             attachment_type: 'default',
                             actions: actions,
@@ -166,7 +166,45 @@ module.exports = function(controller) {
         
         // check message.actions and message.callback_id to see what action to take...
         if(message.callback_id === 'selectMenuItem') {
-            console.log(message);
+            const value = parseInt(message.actions[0].value, 10);
+            const oldMessage = message.original_message.text;
+            const user = message.user;
+            let newMessage = [];
+            let newActions = [];
+            console.log(value);
+            console.log(oldMessage);
+            //const newMessageArr = oldMessage.split('\n');
+            oldMessage.split('\n').forEach((item, index) => {
+                const selectedRow = value - 1;
+                const number = index + 1;
+                const action = {
+                    "name": number,
+                    "text": index === selectedRow ? `✓ ${number}` : number,
+                    "style": index === selectedRow ? 'primary' : 'default',
+                    "value": number,
+                    "type": "button",
+                }
+                
+                //Add action for each menu
+                newActions.push(action);
+
+                // append user name to selected row.
+                if (index === selectedRow) {
+                    item.indexOf('>>>') > -1 ? newMessage.push(`${item}, <@${user}>`) : newMessage.push(`${item} >>> <@${user}>`)
+                }
+            });
+
+            bot.replyInteractive(message, {
+                text: newMessage.join('\n'),
+                attachments:[
+                    {
+                        title: 'Make your choice from list above.',
+                        callback_id: 'selectMenuItem',
+                        attachment_type: 'default',
+                        actions: actions,
+                    }
+                ]
+            });
         }
     });
 }
