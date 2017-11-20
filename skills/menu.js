@@ -33,7 +33,7 @@ module.exports = function(controller) {
 
             menuScrapper.getMenuImage().then((screenshotName) => {
                 console.log('Got The Image');
-                const link = `${process.env.URL}/images/menu/${screenshotName}`;
+                const link = `${process.env.URL}images/menu/${screenshotName}`;
                 
                 bot.reply(message, {
                     text: null,

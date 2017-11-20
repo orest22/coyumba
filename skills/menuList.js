@@ -4,7 +4,7 @@ module.exports = function(controller) {
     // define a before hook
     // you may define multiple before hooks. they will run in the order they are defined.
     // See: https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md#controllerstudiobefore
-    controller.studio.before('menu list', function(convo, next) {
+    controller.studio.before('List', function(convo, next) {
 
         // do some preparation before the conversation starts...
         // for example, set variables to be used in the message templates
@@ -20,7 +20,7 @@ module.exports = function(controller) {
 
     });
 
-    controller.hears(['menu list'], 'direct_message,direct_mention', function(bot, message) {
+    controller.hears(['List'], 'direct_message,direct_mention', function(bot, message) {
 
         try {
             // get menu array
@@ -50,7 +50,7 @@ module.exports = function(controller) {
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
     // Validate user input: question_1
-    controller.studio.validate('Menu','question_1', function(convo, next) {
+    controller.studio.validate('List','question_1', function(convo, next) {
 
         var value = convo.extractResponse('question_1');
 
@@ -65,7 +65,7 @@ module.exports = function(controller) {
     });
 
     // Validate user input: question_2
-    controller.studio.validate('Menu','question_2', function(convo, next) {
+    controller.studio.validate('List','question_2', function(convo, next) {
 
         var value = convo.extractResponse('question_2');
 
@@ -80,7 +80,7 @@ module.exports = function(controller) {
     });
 
     // Validate user input: question_3
-    controller.studio.validate('Menu','question_3', function(convo, next) {
+    controller.studio.validate('List','question_3', function(convo, next) {
 
         var value = convo.extractResponse('question_3');
 
@@ -100,7 +100,7 @@ module.exports = function(controller) {
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
     // Before the default thread starts, run this:
-    controller.studio.beforeThread('Menu','default', function(convo, next) {
+    controller.studio.beforeThread('List','default', function(convo, next) {
 
         /// do something fun and useful
         // convo.setVar('name','value');
@@ -112,7 +112,7 @@ module.exports = function(controller) {
     });
 
     // Before the on_timeout thread starts, run this:
-    controller.studio.beforeThread('Menu','on_timeout', function(convo, next) {
+    controller.studio.beforeThread('List','on_timeout', function(convo, next) {
 
         /// do something fun and useful
         // convo.setVar('name','value');
@@ -127,7 +127,7 @@ module.exports = function(controller) {
     // define an after hook
     // you may define multiple after hooks. they will run in the order they are defined.
     // See: https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md#controllerstudioafter
-    controller.studio.after('Menu', function(convo, next) {
+    controller.studio.after('List', function(convo, next) {
 
         console.log('AFTER: Menu');
 
