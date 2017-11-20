@@ -28,12 +28,13 @@ module.exports = function(controller) {
                 let text = "";
 
                 respose.forEach((menuItem, index) => {
-                    text += `${index}) ${menuItem}. \n`;
+                    text += `*${index+1}* ${menuItem}. \n`;
                 });
 
                 // Send menu list
                 bot.reply(message, {
                     text: text,
+                    mrkdwn: true,
                 });
             });
            
