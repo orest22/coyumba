@@ -22,6 +22,10 @@ module.exports = function(controller) {
 
     controller.hears(['List'], 'direct_message,direct_mention', function(bot, message) {
 
+        bot.reply(message, {
+            text: 'Fetching menu list...'
+        });
+
         try {
             // get menu array
             menuScrapper.getMenuList().then( respose => {
