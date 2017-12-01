@@ -178,26 +178,28 @@ module.exports = function(controller) {
             console.log(oldMessage);
             //const newMessageArr = oldMessage.split('\n');
             oldMessage.split('\n').forEach((item, index) => {
-                const selectedRow = value - 1;
-                const number = index + 1;
-                const action = {
-                    'name': number,
-                    'text': index === selectedRow ? `✓ ${number}` : number,
-                    'style': index === selectedRow ? 'primary' : 'default',
-                    'value': number,
-                    'type': 'button',
-                };
-                
-                //Add action for each menu
-                newActions.push(action);
-
-                // append user name to selected row.
-                if (index === selectedRow) {
-                    console.log(item);
-                    console.log(item.indexOf('&gt;&gt;&gt;'));
-                    item.indexOf('&gt;&gt;&gt;') > -1 ? newMessage.push(`${item}, <@${user}>`) : newMessage.push(`${item} &gt;&gt;&gt; <@${user}>`)
-                } else {
-                    newMessage.push(item);
+                if(item != '') {
+                    const selectedRow = value - 1;
+                    const number = index + 1;
+                    const action = {
+                        'name': number,
+                        'text': index === selectedRow ? `✓ ${number}` : number,
+                        'style': index === selectedRow ? 'primary' : 'default',
+                        'value': number,
+                        'type': 'button',
+                    };
+                    
+                    //Add action for each menu
+                    newActions.push(action);
+    
+                    // append user name to selected row.
+                    if (index === selectedRow) {
+                        console.log(item);
+                        console.log(item.indexOf('&gt;&gt;&gt;'));
+                        item.indexOf('&gt;&gt;&gt;') > -1 ? newMessage.push(`${item}, <@${user}>`) : newMessage.push(`${item} &gt;&gt;&gt; <@${user}>`)
+                    } else {
+                        newMessage.push(item);
+                    }
                 }
             });
 
