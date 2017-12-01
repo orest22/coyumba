@@ -21,9 +21,18 @@ function composeAttachments(actions) {
     return attachments;
 }
 
+function addUser(item, user) {
+    return user;
+}
+
+function deleteUser(item, user) {
+    return user;
+}
+
+
 function toggleUser(item, user) {
     let str = '';
-    const blockquote = '&gt;&gt;&gt;';
+    const blockquote = '/n&gt;';
 
     // Look if anyone already have chosen item
     if ( item.indexOf(blockquote) > -1){
