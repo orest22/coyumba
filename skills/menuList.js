@@ -1,29 +1,7 @@
 const menuScrapper = require('../components/menuScrapper');
+const composeAttachments = require('../util/helpers').composeAttachments;
 
 module.exports = function(controller) {
-
-    // Returns an array of attachments
-    function composeAttachments(actions) {
-        // Spit actions in to attachments.
-        // Max 4 actions per attachment
-        let attachmetsAmount = Math.ceil(actions.length / 4);
-        const attachments = [];
-
-        for(let i = 1; i <= attachmetsAmount; attachmetsAmount++) {
-            const title = i === 1 ? 'Make your choice from list above.' : '';
-            const start = (i - 1) * 4;
-            const end = start + 4;
-
-            attachments.push({
-                title: title,
-                callback_id: 'selectMenuItem',
-                attachment_type: 'default',
-                actions: actions.slice(start, end),
-            });
-        }
-
-        return attachments;
-    }
 
     // define a before hook
     // you may define multiple before hooks. they will run in the order they are defined.
@@ -53,7 +31,7 @@ module.exports = function(controller) {
         try {
             // get menu array
             menuScrapper.getMenuList().then( respose => {
-                let text = "";
+                let text = '';
                 let actions = [];
 
                 // Create actions
@@ -61,10 +39,10 @@ module.exports = function(controller) {
                     const number = index + 1;
                     text += `*${number}.* ${menuItem}. \n`;
                     actions.push({
-                        "name": number,
-                        "text": number,
-                        "value": number,
-                        "type": "button",
+                        'name': number,
+                        'text': number,
+                        'value': number,
+                        'type': 'button',
                     });
                 });
 
@@ -95,7 +73,7 @@ module.exports = function(controller) {
     // Validate user input: question_1
     controller.studio.validate('List','question_1', function(convo, next) {
 
-        var value = convo.extractResponse('question_1');
+        // const value = convo.extractResponse('question_1');
 
         // test or validate value somehow
         // can call convo.gotoThread() to change direction of conversation
@@ -110,7 +88,7 @@ module.exports = function(controller) {
     // Validate user input: question_2
     controller.studio.validate('List','question_2', function(convo, next) {
 
-        var value = convo.extractResponse('question_2');
+        // var value = convo.extractResponse('question_2');
 
         // test or validate value somehow
         // can call convo.gotoThread() to change direction of conversation
@@ -125,7 +103,7 @@ module.exports = function(controller) {
     // Validate user input: question_3
     controller.studio.validate('List','question_3', function(convo, next) {
 
-        var value = convo.extractResponse('question_3');
+        // var value = convo.extractResponse('question_3');
 
         // test or validate value somehow
         // can call convo.gotoThread() to change direction of conversation
@@ -177,7 +155,7 @@ module.exports = function(controller) {
         // handle the outcome of the convo
         if (convo.successful()) {
 
-            var responses = convo.extractResponses();
+           // var responses = convo.extractResponses();
             // do something with the responses
 
         }
@@ -203,12 +181,12 @@ module.exports = function(controller) {
                 const selectedRow = value - 1;
                 const number = index + 1;
                 const action = {
-                    "name": number,
-                    "text": index === selectedRow ? `✓ ${number}` : number,
-                    "style": index === selectedRow ? 'primary' : 'default',
-                    "value": number,
-                    "type": "button",
-                }
+                    'name': number,
+                    'text': index === selectedRow ? `✓ ${number}` : number,
+                    'style': index === selectedRow ? 'primary' : 'default',
+                    'value': number,
+                    'type': 'button',
+                };
                 
                 //Add action for each menu
                 newActions.push(action);
@@ -237,4 +215,4 @@ module.exports = function(controller) {
             });
         }
     });
-}
+};
