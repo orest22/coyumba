@@ -1,6 +1,30 @@
 const menuScrapper = require('../components/menuScrapper');
 
 module.exports = function(controller) {
+
+    // Returns an array of attachments
+    function composeAttachments(actions) {
+        // Spit actions in to attachments.
+        // Max 4 actions per attachment
+        const attachmetsAmount = Math.ceil(actions.length / 4);
+        const attachments = [];
+
+        for(let i = 1; i <= attachmetsAmount; attachmetsAmount++) {
+            const title = i === 1 ? 'Make your choice from list above.' : '';
+            const start = (i - 1) * 4;
+            const end = start + 4;
+
+            attachments.push({
+                title: title,
+                callback_id: 'selectMenuItem',
+                attachment_type: 'default',
+                actions: actions.slice(start, end),
+            })
+        }
+
+        return attachments;
+    }
+
     // define a before hook
     // you may define multiple before hooks. they will run in the order they are defined.
     // See: https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md#controllerstudiobefore
@@ -32,6 +56,7 @@ module.exports = function(controller) {
                 let text = "";
                 let actions = [];
 
+                // Create actions
                 respose.forEach((menuItem, index) => {
                     const number = index + 1;
                     text += `*${number}.* ${menuItem}. \n`;
@@ -43,19 +68,15 @@ module.exports = function(controller) {
                     });
                 });
 
+                const attachments = composeAttachments(actions);
+
+
                 // Send menu list
                 bot.reply(message, {
                     text: text,
                     attachment_type: 'default',
                     mrkdwn: true,
-                    attachments:[
-                        {
-                            title: 'Make your choice from list above.',
-                            callback_id: 'selectMenuItem',
-                            attachment_type: 'default',
-                            actions: actions,
-                        }
-                    ]
+                    attachments: attachments,
                 });
             });
            
