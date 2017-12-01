@@ -1,5 +1,6 @@
 const menuScrapper = require('../components/menuScrapper');
 const composeAttachments = require('../util/helpers').composeAttachments;
+const toggleUser = require('../util/helpers').toggleUser;
 
 module.exports = function(controller) {
 
@@ -194,9 +195,7 @@ module.exports = function(controller) {
     
                     // append user name to selected row.
                     if (index === selectedRow) {
-                        console.log(item);
-                        console.log(item.indexOf('&gt;&gt;&gt;'));
-                        item.indexOf('&gt;&gt;&gt;') > -1 ? newMessage.push(`${item}, <@${user}>`) : newMessage.push(`${item} &gt;&gt;&gt; <@${user}>`)
+                        newMessage.push(toggleUser(item, user));
                     } else {
                         newMessage.push(item);
                     }
