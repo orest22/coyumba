@@ -6,8 +6,8 @@ module.exports = function(controller) {
     function composeAttachments(actions) {
         // Spit actions in to attachments.
         // Max 4 actions per attachment
-        const attachmetsAmount = Math.ceil(actions.length / 4);
-        let attachments = [];
+        let attachmetsAmount = Math.ceil(actions.length / 4);
+        const attachments = [];
 
         for(let i = 1; i <= attachmetsAmount; attachmetsAmount++) {
             const title = i === 1 ? 'Make your choice from list above.' : '';
@@ -19,7 +19,7 @@ module.exports = function(controller) {
                 callback_id: 'selectMenuItem',
                 attachment_type: 'default',
                 actions: actions.slice(start, end),
-            })
+            });
         }
 
         return attachments;
