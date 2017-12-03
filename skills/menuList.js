@@ -207,7 +207,7 @@ module.exports = function(controller) {
                     } else {
                         // clean item if there is user name
                         let str = item;
-                        if(str.indexOf(`<@${user}>`) === -1) {
+                        if(str.indexOf(`<@${user}>`) != -1) {
                             str = toggleUser(str, user);
                         }
 
