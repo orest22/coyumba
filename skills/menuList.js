@@ -203,7 +203,7 @@ module.exports = function(controller) {
             });
 
             bot.replyInteractive(message, {
-                text: newMessage.join('\n'),
+                text: newMessage.join('.\n'),
                 mrkdwn: true,                
                 attachments: composeAttachments(newActions),
             });
