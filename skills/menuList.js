@@ -201,11 +201,17 @@ module.exports = function(controller) {
                                 'style': 'default',
                             });
                         }
-                        
+
                         newMessage.push(str);
                         
                     } else {
-                        newMessage.push(item);
+                        // clean item if there is user name
+                        let str = item;
+                        if(str.indexOf(`<@${user}>`) === -1) {
+                            str = toggleUser(str, user);
+                        }
+
+                        newMessage.push(str);
                     }
 
                     // Add action for each menu
