@@ -178,7 +178,7 @@ module.exports = function(controller) {
             //console.log(value);
             //console.log(oldMessage);
             //const newMessageArr = oldMessage.split('\n');
-            oldMessage.split('. \n').forEach((item, index) => {
+            oldMessage.split('.\n').forEach((item, index) => {
                 if(item != '') {
                     const selectedRow = value - 1;
                     const number = index + 1;
