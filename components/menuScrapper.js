@@ -38,6 +38,8 @@ async function getMenuList() {
     try {
         const browser = await openBrowser();
         const page = await openPage(browser);
+
+        if (!page) throw new Error('Page can\'t be open');
         
         const result = await page.evaluate(() => {
             let data = []; // Create an empty array that will store our data
@@ -63,7 +65,7 @@ async function openBrowser() {
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
     } catch(e) {
-        console.log('Error: Cant open browser');
+        console.log('Error: Cant open browser.');
     }
 }
 
@@ -92,7 +94,7 @@ async function closeBrowser(browser, callback) {
             callback();
         });    
     } catch (error) {
-        console.log('Error: Cant close the browser');
+        console.log('Error: Cant close the browser.');
     }
 }
 
