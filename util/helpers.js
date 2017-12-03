@@ -32,7 +32,7 @@ function deleteUser(item, user) {
 
 function toggleUser(item, user) {
     let str = '';
-    const blockquote = '/n&gt;';
+    const blockquote = '\n&gt;';
 
     // Look if anyone already have chosen item
     if ( item.indexOf(blockquote) > -1){
