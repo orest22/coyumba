@@ -200,6 +200,8 @@ module.exports = function(controller) {
                                 'text': number,
                                 'style': 'default',
                             });
+
+                            newMessage.push(str);
                         }
                     } else {
                         newMessage.push(item);
