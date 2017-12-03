@@ -182,23 +182,31 @@ module.exports = function(controller) {
                 if(item != '') {
                     const selectedRow = value - 1;
                     const number = index + 1;
-                    const action = {
+                    let action = {
                         'name': number,
                         'text': index === selectedRow ? `✓ ${number}` : number,
                         'style': index === selectedRow ? 'primary' : 'default',
                         'value': number,
                         'type': 'button',
                     };
-                    
-                    //Add action for each menu
-                    newActions.push(action);
     
-                    // append user name to selected row.
+                    // Append user name to selected row.
                     if (index === selectedRow) {
-                        newMessage.push(toggleUser(item, user));
+                        const str = toggleUser(item, user);
+
+                        // Update action
+                        if(str.indexOf(`<@${user}>`) === -1) {
+                            action = Object.assign(action, {
+                                'text': number,
+                                'style': 'default',
+                            });
+                        }
                     } else {
                         newMessage.push(item);
                     }
+
+                    // Add action for each menu
+                    newActions.push(action);
                 }
             });
 
