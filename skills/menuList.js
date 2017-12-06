@@ -7,7 +7,7 @@ module.exports = function(controller) {
     // define a before hook
     // you may define multiple before hooks. they will run in the order they are defined.
     // See: https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md#controllerstudiobefore
-    controller.studio.before('List', function(convo, next) {
+    controller.studio.before('^List', function(convo, next) {
 
         // do some preparation before the conversation starts...
         // for example, set variables to be used in the message templates

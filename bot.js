@@ -55,7 +55,7 @@ var env = require('node-env-file');
 try {
     env(__dirname + '/.env');
 } catch (error) {
-    console.log('Error: No Env File. Use global variables')
+    console.log('Error: No Env File. Use global variables');
 }
 
 
