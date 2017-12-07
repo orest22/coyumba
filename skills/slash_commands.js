@@ -13,15 +13,18 @@ module.exports = function(controller) {
                 const job = new CronJob({
                     cronTime: '00 01 * * * *',
                     onTick: function() {
+                        console.log('Cron task.');
                         bot.replyPublic(message,'Everyone can see this part of the slash command');
                     },
                     start: false,
                 });
 
                 const commandArr = message.text.split(' ');
+                console.log(commandArr);
     
                 switch (commandArr[0]) {
                     case 'start':
+                        console.log('start');
                         job.start();
                         break;
                     case 'stop':
