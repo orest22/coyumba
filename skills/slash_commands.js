@@ -6,9 +6,9 @@ module.exports = function(controller) {
     controller.on('slash_command',function(bot,message) {
         console.log(message);
 
-        const commandArr = message.split(' ');
+        
 
-        if(commandArr[0] === 'coyumba' && commandArr[1]) {
+        if(message.command === '/coyumba' && message.text) {
             try {
                 const job = new CronJob({
                     cronTime: '00 01 * * * *',
@@ -17,8 +17,10 @@ module.exports = function(controller) {
                     },
                     start: false,
                 });
+
+                const commandArr = message.text.split(' ');
     
-                switch (commandArr[1]) {
+                switch (commandArr[0]) {
                     case 'start':
                         job.start();
                         break;
