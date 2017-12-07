@@ -11,7 +11,7 @@ module.exports = function(controller) {
         if(message.command === '/coyumba' && message.text) {
             try {
                 const job = new CronJob({
-                    cronTime: '00 01 * * * *',
+                    cronTime: '10 * * * * *',
                     onTick: function() {
                         console.log('Cron task.');
                         bot.replyPublic(message,'Everyone can see this part of the slash command');
@@ -26,6 +26,8 @@ module.exports = function(controller) {
                     case 'start':
                         console.log('start');
                         job.start();
+
+                        console.log('job1 status', job.running);
                         break;
                     case 'stop':
                         job.stop();
