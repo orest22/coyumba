@@ -37,15 +37,15 @@ module.exports = function(controller) {
                 
                 bot.reply(message, {
                     text: null,
-                    "attachments": [
+                    attachments: [
                         {
-                            "fallback": "Required plain-text summary of the attachment.",
-                            "color": "#36a64f",
-                            "title": "New Yumba Menu",
-                            "title_link": link,
-                            "text": "Checkout new Yumba menu.",
-                            "image_url": link,
-                            "footer": "CoYumba"
+                            fallback: 'Required plain-text summary of the attachment.',
+                            color: '#36a64f',
+                            title: 'New Yumba Menu',
+                            title_link: link,
+                            text: 'Checkout new Yumba menu.',
+                            image_url: link,
+                            footer: 'CoYumba'
                         }
                     ]
                 });
