@@ -3,6 +3,15 @@ var CronJob = require('cron').CronJob;
 
 
 module.exports = function(controller) {
+
+    const job = new CronJob({
+        cronTime: '10 * * * * *',
+        onTick: function() {
+            console.log('Cron task.');
+        },
+        start: false,
+    });
+    
     controller.on('slash_command',function(bot,message) {
         console.log(message);
 
@@ -10,14 +19,7 @@ module.exports = function(controller) {
 
         if(message.command === '/coyumba' && message.text) {
             try {
-                const job = new CronJob({
-                    cronTime: '10 * * * * *',
-                    onTick: function() {
-                        console.log('Cron task.');
-                        bot.replyPublic(message,'Everyone can see this part of the slash command');
-                    },
-                    start: false,
-                });
+                
 
                 const commandArr = message.text.split(' ');
                 console.log(commandArr);
