@@ -32,7 +32,11 @@ module.exports = function(controller) {
                         console.log('job1 status', job.running);
                         break;
                     case 'stop':
+                        bot.replyPrivate(message,`job1 status${job.running}`);
+                        console.log('job1 status above to stop', job.running);
                         job.stop();
+                        console.log('job1 stopped', job.running);
+
                         break;
                     default:
                         break;
