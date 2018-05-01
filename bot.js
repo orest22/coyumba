@@ -78,17 +78,21 @@ var bot_options = {
 
 // Use a mongo database if specified, otherwise store in a JSON file local to the app.
 // Mongo is automatically configured when deploying to Heroku
-if (process.env.MONGO_URI) {
-  var mongoStorage = require('botkit-storage-mongo')({
-    mongoUri: process.env.MONGO_URI
-  });
-  bot_options.storage = mongoStorage;
-} else {
-  bot_options.json_file_store = __dirname + '/.data/db/'; // store user data in a simple JSON format
-}
+// if (process.env.MONGO_URI) {
+//   var mongoStorage = require('botkit-storage-mongo')({
+//     mongoUri: process.env.MONGO_URI
+//   });
+//   bot_options.storage = mongoStorage;
+// } else {
+//   bot_options.json_file_store = __dirname + '/.data/db/'; // store user data in a simple JSON format
+// }
 
 // Create the Botkit controller, which controls all instances of the bot.
 var controller = Botkit.slackbot(bot_options);
+
+var appBot = controller.spawn({
+  token: process.env.bot_token
+}).startRTM();
 
 controller.startTicking();
 
@@ -108,13 +112,13 @@ require(__dirname + '/components/onboarding.js')(controller);
 require(__dirname + '/components/plugin_glitch.js')(controller);
 
 // enable advanced botkit studio metrics
-require('botkit-studio-metrics')(controller);
+//require('botkit-studio-metrics')(controller);
 
 var normalizedPath = require('path').join(__dirname, 'skills');
 require('fs')
   .readdirSync(normalizedPath)
   .forEach(function(file) {
-    require('./skills/' + file)(controller);
+    require('./skills/' + file)(controller, appBot);
   });
 
 // This captures and evaluates any message sent to the bot as a DM

@@ -1,42 +1,42 @@
 var CronJob = require('cron').CronJob;
+var JobManager = require('../components/cron/job-manager.js');
 
 
+module.exports = function(controller, bot) {
 
-module.exports = function(controller) {
+    var jm = new JobManager(bot);
 
-    const job = new CronJob({
-        cronTime: '10 * * * * *',
-        onTick: function() {
-            console.log('Cron task.');
-        },
-        start: false,
-    });
     
-    controller.on('slash_command',function(bot,message) {
-        console.log(message);
-
+    controller.on('slash_command',function(bot, message) {
         
+        let response = '',
+            job;
 
         if(message.command === '/coyumba' && message.text) {
             try {
-                
 
                 const commandArr = message.text.split(' ');
                 console.log(commandArr);
     
                 switch (commandArr[0]) {
                     case 'start':
-                        console.log('start');
-                        job.start();
-
-                        console.log('job1 status', job.running);
+                        job = jm.add('* * * * * 5', message.channel);
+                        response = job.print();
                         break;
                     case 'stop':
-                        bot.replyPrivate(message,`job1 status${job.running}`);
-                        console.log('job1 status above to stop', job.running);
-                        job.stop();
-                        console.log('job1 stopped', job.running);
-
+                        jm.jobs.forEach(job => {
+                            job.stop();
+                        });
+                        response =  'Stoped';
+                        break;
+                    case 'list':
+                        response =  jm.list().then((
+                            arr => {
+                                response = arr.join('\n');
+                            }
+                        )).catch(err => {
+                            response = err.message;
+                        });
                         break;
                     default:
                         break;
@@ -49,7 +49,7 @@ module.exports = function(controller) {
         
         // reply to slash command
        
-        bot.replyPrivate(message,'Only the person who used the slash command can see this.');
+        bot.replyPrivate(message, response);
         
     });
 };
