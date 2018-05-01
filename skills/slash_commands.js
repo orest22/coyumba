@@ -9,7 +9,7 @@ module.exports = function(controller, bot) {
     
     controller.on('slash_command',function(bot, message) {
         
-        let response = '',
+        let response = 'Empty response',
             job;
 
         if(message.command === '/coyumba' && message.text) {
