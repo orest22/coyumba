@@ -21,6 +21,7 @@ module.exports = function(controller, bot) {
                 switch (commandArr[0]) {
                     case 'start':
                         job = jm.add('* * * * * 5', message.channel);
+                        console.log(job.print());
                         response = job.print();
                         break;
                     case 'stop':
