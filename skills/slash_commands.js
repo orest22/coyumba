@@ -1,15 +1,20 @@
-var CronJob = require('cron').CronJob;
-var JobManager = require('../components/cron/job-manager.js');
+var JobService = require('../components/services/JobService');
 
 
-module.exports = function(controller, bot) {
+module.exports = function(controller) {
+    let jm;
 
-    var jm = new JobManager(bot);
+    controller.spawn({
+        'token': process.env.bot_token
+    }, function(bot) {
+        jm = new JobService(bot);
+    });
 
     
     controller.on('slash_command',function(bot, message) {
         
-        let response = 'Empty response',
+        
+        let response = 'Empty response ' + message.channel,
             job;
 
         if(message.command === '/coyumba' && message.text) {
@@ -19,26 +24,55 @@ module.exports = function(controller, bot) {
                 console.log(commandArr);
     
                 switch (commandArr[0]) {
-                    case 'start':
-                        job = jm.add('* * * * * 5', message.channel);
-                        console.log(job.print());
-                        response = job.print();
+                    case 'add':
+                        job = jm.add('* * * * * *', message.channel);
+                        job.print().then(jobInfo => { 
+                            bot.replyPrivate(message, jobInfo);
+                        }).catch(err => {
+                            bot.replyPrivate(err.message);
+                        });
                         break;
                     case 'stop':
-                        jm.jobs.forEach(job => {
-                            job.stop();
+                        console.log('STOP');
+                        jm.jobs.ids.forEach(jobID => {
+                            jm.remove(jobID);
                         });
-                        response =  'Stoped';
+                        bot.replyPrivate(message, 'All jobs have been stoped');
                         break;
                     case 'list':
-                        response =  jm.list().then((
-                            arr => {
-                                response = arr.join('\n');
+                        jm.list().then(
+                            list => {
+                                if(list.length) {
+                                    bot.replyPrivate(message, `List: \n${list.join('\n')}`);
+                                } else {
+                                    bot.replyPrivate(message, 'List is empty');
+                                }
                             }
-                        )).catch(err => {
-                            response = err.message;
+                        ).catch(err => {
+                            console.log(err);
+                            bot.replyPrivate(message, err.message);
                         });
                         break;
+                    case 'channel':
+                        new Promise((resolve, reject) => {
+                            bot.api.channels.info({
+                                'channel': message.channel
+                            }, function (err, res) {
+                                if(res.ok) {
+                                    resolve(res.channel.name);
+                                } else {
+                                    resolve(res.err);
+                                }
+    
+                            });
+                        }).then((resolved) => {
+                            console.log('Resolved');
+                            bot.replyPrivate(message, `Channel info: ${resolved}`);
+                        }).catch(err => {
+                            console.log(err);  
+                        }); 
+                        
+                        break;    
                     default:
                         break;
                 }
@@ -47,10 +81,6 @@ module.exports = function(controller, bot) {
             }
             
         }
-        
-        // reply to slash command
-       
-        bot.replyPrivate(message, response);
-        
+               
     });
 };

@@ -12,11 +12,11 @@ describe('[COMPOSE ATTACHMENTS]', function() {
 describe('[TOGGLE USER]', function() {
     const str = 'Menu item name';
     const userName = 'Orest';
-    const blockquote = '&gt;&gt;&gt;';
+    const blockquote = '\n&gt;';
 
     it('User select for the first time', function() {
         const newString = helpers.toggleUser(str, userName);
-        const result = `${str} ${blockquote} <@${userName}>`;
+        const result = `${str}${blockquote} <@${userName}>`;
 
         expect(newString).to.be.equal(result);
     });

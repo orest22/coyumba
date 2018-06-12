@@ -184,8 +184,8 @@ module.exports = function(controller) {
                     const number = index + 1;
                     let action = {
                         'name': number,
-                        'text': index === selectedRow ? `✓ ${number}` : number,
-                        'style': index === selectedRow ? 'primary' : 'default',
+                        'text': number,
+                        'style': 'default',
                         'value': number,
                         'type': 'button',
                     };

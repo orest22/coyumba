@@ -1,4 +1,9 @@
-// Returns an array of attachments
+const fs = require('fs');
+
+
+/**
+ * Returns an array of attachments 
+ */ 
 function composeAttachments(actions) {
     // Spit actions in to attachments.
     // Max 4 actions per attachment
@@ -14,6 +19,7 @@ function composeAttachments(actions) {
             title: title,
             callback_id: 'selectMenuItem',
             attachment_type: 'default',
+            color: '#ffc20f',
             actions: actions.slice(start, end),
         });
     }
@@ -21,47 +27,77 @@ function composeAttachments(actions) {
     return attachments;
 }
 
-function addUser(item, user) {
-    return user;
-}
-
-function deleteUser(item, user) {
-    return user;
-}
-
-
+/**
+ * Toogle user for item
+ * @param {*} item 
+ * @param {*} user 
+ */
 function toggleUser(item, user) {
     let str = '';
+    let users = [];
+    const userSlackString= `<@${user}>`;
     const blockquote = '\n&gt;';
+    const userRegEx = /<@[^>]+>/g; //Matches , <@USER> | <@USER>,
+    const itemArr = item.split(blockquote);
+    const usersString = itemArr[1];
 
-    // Look if anyone already have chosen item
-    if ( item.indexOf(blockquote) > -1){
-        
-        // Look if current user did select it previously
-        if ( item.indexOf(`<@${user}>`) > -1) {
-            
-            // remove currect user
-            str = item.replace(`<@${user}>`, '');
+    // save item title
+    str = itemArr[0];
+    
+    if(usersString) {
+        // Find all users in string
+        users = usersString.match(userRegEx);
 
-            // Check if other user did select it
-            if(str.indexOf('<@') > -1) {
-                return str;
-            } else {
-                return str.replace(blockquote, '').trim();
-            }
-
+        // User is in list lets remove
+        if(users.indexOf(userSlackString) > -1) {
+            users = users.filter( user => user !== userSlackString);
         } else {
-            str = `${item}, <@${user}>`;
+            users.push(userSlackString);
         }
-
     } else {
-        str = `${item} ${blockquote} <@${user}>`;
+        users.push(`<@${user}>`);
     }
 
-    return str;
+    if (users.length) {
+        str += `${blockquote} ${users.join(', ')}`;
+    }
+
+    return  str.trim();
+}
+
+/**
+ * Check if file exists
+ * @param {*} path 
+ */
+function fileExists(path) {
+    return new Promise((resolve) => {
+        fs.access(path,  (err) => {
+            if (err) {
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+        });
+    });
+}
+
+/**
+ * Runs toJSON for each element of array
+ * @param {*} arr 
+ */
+function arrayToJSON(arr) {
+    let jsonArr = [];
+
+    if(Array.isArray(arr)) {
+        jsonArr = arr.map(element => element.toJSON && element.toJSON());
+    }
+
+    return jsonArr;
 }
 
 module.exports = {
     toggleUser: toggleUser,
     composeAttachments: composeAttachments,
+    fileExists: fileExists,
+    arrayToJSON: arrayToJSON,
 };
