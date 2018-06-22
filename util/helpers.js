@@ -86,13 +86,36 @@ function fileExists(path) {
  * @param {*} arr 
  */
 function arrayToJSON(arr) {
-    let jsonArr = [];
+    let jsonArr = {};
 
     if(Array.isArray(arr)) {
-        jsonArr = arr.map(element => element.toJSON && element.toJSON());
+        arr.forEach(element => {
+            if(element.toJSON) {
+                jsonArr[element.id] = element.toJSON();
+            }
+        });
     }
 
     return jsonArr;
+}
+
+/**
+ * Converts onject to arrau
+ * @param {Object} json 
+ * @param {Function} decotator decorating function should always return
+ */
+function jsonToArray(json, decorator) {
+    let arr = [];
+
+    if(json) {
+        for (const key in json) {
+            if (json.hasOwnProperty(key)) {
+                arr.push(decorator(json[key]));
+            }
+        }
+    }
+
+    return arr;
 }
 
 module.exports = {
@@ -100,4 +123,5 @@ module.exports = {
     composeAttachments: composeAttachments,
     fileExists: fileExists,
     arrayToJSON: arrayToJSON,
+    jsonToArray: jsonToArray
 };

@@ -7,7 +7,6 @@ try {
 
 if (!process.env.clientId || !process.env.clientSecret || !process.env.PORT) {
   console.log('Error: Specify clientId clientSecret and PORT in environment');
-  usage_tip();
   process.exit(1);
 }
 

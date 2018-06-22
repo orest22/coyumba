@@ -1,15 +1,13 @@
-/*
-
-Botkit Studio Skill module to enhance the "Menu" script
-
-*/
-const menuScrapper = require('../components/menuScrapper');
+/**
+ * Botkit Studio Skill module to enhance the "Menu" script
+ */
+const ScrapingService = require('../components/services/ScrapingService');
 
 
 module.exports = function(controller) {
-    // define a before hook
-    // you may define multiple before hooks. they will run in the order they are defined.
-    // See: https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md#controllerstudiobefore
+    
+
+
     controller.studio.before('Menu', function(convo, next) {
 
         // do some preparation before the conversation starts...
@@ -17,9 +15,6 @@ module.exports = function(controller) {
         // convo.setVar('foo','bar');
         
         console.log('BEFORE: Menu');
-        bot.reply(message, {
-            text: 'Fetching menu image...'
-        });
         
 
         // don't forget to call next, or your conversation will never continue.
@@ -31,7 +26,7 @@ module.exports = function(controller) {
 
         try {
             bot.startTyping(message);
-            menuScrapper.getMenuImage().then((screenshotName) => {
+            ScrapingService.getMenuImage().then((screenshotName) => {
                 console.log('Got The Image');
                 const link = `${process.env.URL}images/menu/${screenshotName}`;
                 

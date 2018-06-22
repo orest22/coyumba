@@ -1,12 +1,13 @@
-const arrayToJSON = require('../../util/helpers');
+const arrayToJSON = require('../../util/helpers').arrayToJSON;
 /**
  * List item
  */
 class ListItem {
 
-    constructor(title) {
-        this.title = title;
-        this.users = [];
+    constructor(options) {
+        this.id = options.id;
+        this.title = options.title;
+        this.users = options.users || [];
     }
 
     /**
@@ -15,9 +16,11 @@ class ListItem {
      * @param {Function} callback 
      */
     toggleUser(user, callback) {
-        if(this.users.indexOf(user) > -1) {
+        const userIds = this.users.map(user => user.id);
+
+        if (userIds.indexOf(user.id) > -1) {
             this.removeUser(user, callback);
-        }else {
+        } else {
             this.addUser(user, callback);
         }
     }
@@ -28,10 +31,11 @@ class ListItem {
      * @param {Function} callback 
      */
     addUser(user, callback) {
+        //@TODO add user object it has to have id
         this.users.push(user);
 
-         // Call callback when user get removed
-         callback && callback(true);
+        // Call callback when user get removed
+        callback && callback(true);
     }
 
     /**
@@ -40,16 +44,33 @@ class ListItem {
      * @param {Function} callback 
      */
     removeUser(user, callback) {
-        if(this.users.indexOf(user) > -1) {
-            this.users = this.users.filter( u => u !== user );
-            
+        const newUsers = this.users.filter( u => u.id !== user.id );
+
+        if(newUsers.length < this.users.length) {
+            this.users = newUsers;
             // Call callback when user get removed
             callback && callback(false);
         }
+
+        return;
     }
 
+    toSlack() {
+        let users  = this.users.map( user => `<@${user.id}>`);
+        let item =  `*${this.id}.* ${this.title}.\n`;
+        if(users.length) {
+            item  += `\n&gt;${users.join(', ')}\n`;
+        }
+        
+        return item;
+    }
+
+    /**
+     * Converts to JSON
+     */
     toJSON() {
         return {
+            id: this.id,
             title: this.title,
             users: arrayToJSON(this.users)
         };

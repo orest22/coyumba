@@ -23,7 +23,8 @@ module.exports = function(config) {
         lists: {
             get: get(listRef),
             save: save(listRef),
-            all: all(listRef)
+            all: all(listRef),
+            latest: latest(listRef),
         },
         teams: {
             get: get(teamsRef),
@@ -51,6 +52,8 @@ module.exports = function(config) {
  */
 function get(firebaseRef) {
     return function(id, cb) {
+        console.log('Firebase get');
+        console.log(id);
         firebaseRef.child(id).once('value', success, cb);
 
         function success(records) {
@@ -69,6 +72,8 @@ function save(firebaseRef) {
     return function(data, cb) {
         var firebase_update = {};
         firebase_update[data.id] = data;
+        console.log('Before Update');
+        console.log(firebase_update[data.id].items);
         firebaseRef.update(firebase_update, cb);
     };
 }
@@ -96,5 +101,15 @@ function all(firebaseRef) {
 
             cb(null, list);
         }
+    };
+}
+
+/**
+ * Get latest list by week
+ * @param {*} firebaseRef 
+ */
+function latest(firebaseRef) {
+    return function() {
+        return firebaseRef.orderByChild('week').limitToFirst(1).once('value');
     };
 }

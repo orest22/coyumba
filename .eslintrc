@@ -2,7 +2,10 @@
   "rules": {
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
-    "no-console": 0,
+    "no-console": 0
+  },
+  "parserOptions": {
+    "ecmaVersion": 8
   },
   "extends": "eslint:recommended",
   "env": {
