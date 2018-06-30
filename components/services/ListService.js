@@ -29,19 +29,22 @@ class ListService {
 
         this.storage.lists.get(String(listId), function(error, dataSnapshot) {
             let items = [];
+            let total = 0;
 
             if(!dataSnapshot) {
                 throw new Error(`List #${listId} not found`);
             }
 
-            console.log('LIST->', listId, dataSnapshot);
-
             dataSnapshot.items.forEach(item => {
-                items.push(new ListItem({
+                
+                const listItem = new ListItem({
                     id: item.id,
                     title: item.title,
-                    users: helpers.jsonToArray(item.users, object => new User(object))
-                }));
+                    users: helpers.jsonToArray(item.users, (object) => new User(object))
+                });
+                total += listItem.users.length;
+
+                items.push(listItem);
             });
 
         
@@ -49,6 +52,7 @@ class ListService {
             const list = new List({
                 title: dataSnapshot.title,
                 items: items,
+                total: total,
             });
 
             // pass list to callback
@@ -70,23 +74,25 @@ class ListService {
             list = await this.storage.lists.latest().then(dataSnapshot => {
 
                 let storageList = null;
+                let total = 0;
                 
                 dataSnapshot.forEach(function(childSnapshot) {
                     childSnapshot.child('items').forEach(item => {
-                        console.log("USERS:");
-                        console.log(item.child('users').val());
-                        
-                        
-                        items.push(new ListItem({
+                        const listItem = new ListItem({
                             id: item.child('id').val(), 
                             title: item.child('title').val(),
                             users: helpers.jsonToArray(item.child('users').val(), object => new User(object))
-                        }));
+                        });
+
+                        total += listItem.users.length;
+
+                        items.push(listItem);
                     });
 
                     storageList = new List({
                         title: childSnapshot.child('title').val(),
                         items: items,
+                        total: total,
                     });
 
                     return true;
@@ -101,7 +107,10 @@ class ListService {
                 console.log('From web site');
                list = await this.scraper.getList().then(data => {
                     
-                    items = data.items.map((listItem, index) => new ListItem(index+1, listItem));
+                    items = data.items.map((listItem, index) => new ListItem({
+                        id: index+1, 
+                        title: listItem
+                    }));
 
                     return new List({
                         items: items,
@@ -112,6 +121,7 @@ class ListService {
                 });
 
                 if(list) {
+                    console.log(list);
                     this.save(list);
                 }
             }

@@ -1,4 +1,5 @@
 let env = require('node-env-file');
+let MailService = require('./components/services/MailService');
 try {
   env(__dirname + '/.env');
 } catch (error) {
@@ -12,6 +13,23 @@ if (!process.env.clientId || !process.env.clientSecret || !process.env.PORT) {
 
 let Botkit = require('botkit');
 let debug = require('debug')('botkit:main');
+
+const mailgunOptions = {
+  auth: {
+    api_key: process.env.MAILGUN_API_KEY,
+    domain: process.env.MAILGUN_DOMAIN,
+  }
+};
+
+const mailClient = new MailService(mailgunOptions);
+
+mailClient.sendText('oresthazda@gmail.com', 'Yumba Bot', 'This is Yumba - slack bot.').then(success => {
+  console.log(success);
+}).catch(error => {
+  console.log(error);
+});
+
+
 let firebaseStorage = require('./components/services/FireBaseService')({
   apiKey: process.env.firebase_apikey,
   databaseURL: process.env.firebase_uri,
