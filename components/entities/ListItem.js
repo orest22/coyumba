@@ -65,6 +65,10 @@ class ListItem {
         return item;
     }
 
+    toEmail() {
+        return `${this.id} | ${this.title} - ${this.users.length || 0}\n`;
+    }
+
     /**
      * Converts to JSON
      */

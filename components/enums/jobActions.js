@@ -1,0 +1,106 @@
+const composeAttachments = require('../../util/helpers').composeAttachments;
+const ListService = require('../services/ListService');
+const ScrapingService = require('../services/ScrapingService');
+
+/**
+ * Email action
+ * @param {Object} options 
+ */
+const email = (options) => {
+    options = options || {};
+
+    const {bot, channel, message} = options;
+    const { storage, mailService } = bot.botkit;
+    const emailTo = process.env.ADMIN_MAIL;
+
+    let ls = new ListService({
+        storage: storage,
+        scraper: new ScrapingService()
+    });
+
+    ls.getList().then( list => {
+        let text = list.toEmail();
+
+        if(bot) {
+
+            const args = {
+                channel,
+                text: `Yumba order has been sent to: ${emailTo}`
+            };
+
+            mailService.sendText(emailTo, 'Yumba Bot - Order', text).then(() => {
+                // Send menu list
+                bot.say(args);
+            }).catch(error => {
+                bot.say({
+                    channel, 
+                    text: error.message
+                });
+            });
+
+        }
+        
+    });
+};
+
+/**
+ * Poll action
+ * @param {Object} options 
+ */
+const poll = (options) => {
+    options = options || {};
+
+    const {bot, channel, message} = options;
+    const isDirect = options.isDirect || false;
+    const { storage } = bot.botkit;
+
+    let ls = new ListService({
+        storage: storage,
+        scraper: new ScrapingService()
+    });
+
+    ls.getList().then( list => {
+        let text = '';
+        let actions = [];
+
+        text = list.toSlack();
+
+        // Create actions
+        list.items.forEach( item => {
+            actions.push({
+                'name': item.id,
+                'text': item.id,
+                'value': `${list.id}|${item.id}`,
+                'type': 'button',
+            });
+        });
+
+        const attachments = composeAttachments(actions);
+
+        if(bot) {
+
+            const args = {
+                text: text,
+                attachment_type: 'default',
+                mrkdwn: true,
+                attachments: attachments,
+                channel: channel,
+            };
+
+            // Send menu list
+            if(message && isDirect) {
+                bot.reply(message, args);
+            } else {
+                bot.say(args);
+            }
+        }
+        
+    });
+
+};
+
+
+module.exports = {
+    email,
+    poll,
+};

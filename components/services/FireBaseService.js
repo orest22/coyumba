@@ -13,6 +13,7 @@ module.exports = function(config) {
         teamsRef = rootRef.child('teams'),
         usersRef = rootRef.child('users'),
         listRef = rootRef.child('lists'),
+        settingsRef = rootRef.child('settings'),
         channelsRef = rootRef.child('channels');
 
     return {
@@ -20,11 +21,17 @@ module.exports = function(config) {
         get: get,
         save: save,
         all: all,
+        settings: {
+            get: get(settingsRef),
+            save: save(settingsRef),
+            all: all(settingsRef),
+            set: set(settingsRef)
+        },
         lists: {
             get: get(listRef),
             save: save(listRef),
             all: all(listRef),
-            latest: latest(listRef),
+            byId: byId(listRef),
         },
         teams: {
             get: get(teamsRef),
@@ -52,8 +59,6 @@ module.exports = function(config) {
  */
 function get(firebaseRef) {
     return function(id, cb) {
-        console.log('Firebase get');
-        console.log(id);
         firebaseRef.child(id).once('value', success, cb);
 
         function success(records) {
@@ -72,8 +77,6 @@ function save(firebaseRef) {
     return function(data, cb) {
         var firebase_update = {};
         firebase_update[data.id] = data;
-        console.log('Before Update');
-        console.log(firebase_update[data.id].items);
         firebaseRef.update(firebase_update, cb);
     };
 }
@@ -108,8 +111,15 @@ function all(firebaseRef) {
  * Get latest list by week
  * @param {*} firebaseRef 
  */
-function latest(firebaseRef) {
-    return function() {
-        return firebaseRef.orderByChild('week').limitToFirst(1).once('value');
+function byId(firebaseRef) {
+    return function(id) {
+        console.log('BY ID:', id);
+        return firebaseRef.child(id).once('value');
+    };
+}
+
+function set(firebaseRef) {
+    return function(property, value, cb) {
+        firebaseRef.child(property).set(value, cb);
     };
 }

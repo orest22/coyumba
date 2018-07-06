@@ -1,9 +1,9 @@
-
 var CronJob = require('cron').CronJob;
 var timezone = process.env.TIMEZONE;
 
 /**
  * Cron Job wrapper
+ * @todo get rid of any bot stuff, only callback has to be passed
  */
 class Job {
 
@@ -32,13 +32,15 @@ class Job {
             this.cronJob = new CronJob(this.pattern, () => {
                 this.callback && this.callback(this.bot, this.channel);
             }, null, false, timezone);
-    
+
             this.cronJob.start();
+
         } catch (err) {
+            console.log('Job not created');
             this.debug();
             console.log(err);
         }
-        
+
     }
 
     /**
@@ -66,13 +68,15 @@ class Job {
 
         return new Promise((resolve, reject) => {
             console.log('print job');
-            this.bot.api.channels.info({ channel: this.channel }, (err, res) => {
-                if(res.ok == false) {
+            this.bot.api.channels.info({
+                channel: this.channel
+            }, (err, res) => {
+                if (res.ok == false) {
                     reject(res.error);
-                } 
-    
+                }
+
                 let channelName = res.channel.name;
-                resolve( '[' + this.id + '] #' + channelName + ' ' + this.pattern);
+                resolve('[' + this.id + '] #' + channelName + ' ' + this.pattern);
             });
         });
     }

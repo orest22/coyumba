@@ -2,6 +2,7 @@ const composeAttachments = require('../util/helpers').composeAttachments;
 const ListService = require('../components/services/ListService');
 const ScrapingService = require('../components/services/ScrapingService');
 const User = require('../components/entities/User');
+const pollAction = require('../components/enums/jobActions').poll;
 module.exports = function(controller) {
 
     let ls = new ListService({
@@ -32,35 +33,13 @@ module.exports = function(controller) {
         });
 
         try {
-            // get menu array
-            ls.getList().then( list => {
-                let text = '';
-                let actions = [];
 
-                text = list.toSlack();
-
-                // Create actions
-                list.items.forEach( item => {
-                    actions.push({
-                        'name': item.id,
-                        'text': item.id,
-                        'value': `${list.id}|${item.id}`,
-                        'type': 'button',
-                    });
-                });
-
-                const attachments = composeAttachments(actions);
-
-
-                // Send menu list
-                bot.reply(message, {
-                    text: text,
-                    attachment_type: 'default',
-                    mrkdwn: true,
-                    attachments: attachments,
-                });
+            pollAction({
+                message,
+                bot,
+                channel: message.channel,
+                isDirect: true
             });
-           
             
         } catch (error) {
             console.log(error);
@@ -170,30 +149,22 @@ module.exports = function(controller) {
     // receive an interactive message, and reply with a message that will replace the original
     controller.on('interactive_message_callback', function(bot, message) {
 
-        console.log(message.callback_id);
+        console.log(message);
         
         // check message.actions and message.callback_id to see what action to take...
         if(message.callback_id === 'selectMenuItem') {
             const valueArr = message.actions[0].value.split('|');
             const itemId = parseInt(valueArr[1], 10);
             const listId = valueArr[0];
-            const user = new User({
-                id: message.user
-            });
+            const user = new User(message.raw_message.user);
             let newActions = [];
-
-            console.log(listId);
 
             try {
 
                 ls.getListById(listId, (list) => {
-                    console.log('Before user toggle');
-                    console.log(list);
     
                     list.toggleUserForItem(itemId, user);
 
-                    console.log('After user toggle');
-                    console.log(list);
                     // Create actions
                     list.items.forEach( item => {
                         newActions.push({
@@ -218,52 +189,6 @@ module.exports = function(controller) {
             } catch (error) {
                 console.log(error);
             }
-
-            
-            
-            
-            
-            // const newMessageArr = oldMessage.split('\n');
-            // oldMessage.split('.\n').forEach((item, index) => {
-            //     if(item != '') {
-            //         const selectedRow = value - 1;
-            //         const number = index + 1;
-            //         let action = {
-            //             'name': number,
-            //             'text': number,
-            //             'style': 'default',
-            //             'value': number,
-            //             'type': 'button',
-            //         };
-    
-            //         // Append user name to selected row.
-            //         if (index === selectedRow) {
-            //             const str = toggleUser(item, user);
-
-            //             // Update action
-            //             if(str.indexOf(`<@${user}>`) === -1) {
-            //                 action = Object.assign(action, {
-            //                     'text': number,
-            //                     'style': 'default',
-            //                 });
-            //             }
-
-            //             newMessage.push(str);
-                        
-            //         } else {
-            //             // clean item if there is user name
-            //             let str = item;
-            //             if(str.indexOf(`<@${user}>`) != -1) {
-            //                 str = toggleUser(str, user);
-            //             }
-
-            //             newMessage.push(str);
-            //         }
-
-            //         // Add action for each menu
-            //         newActions.push(action);
-            //     }
-            // });
         }
     });
 };

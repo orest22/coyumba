@@ -28,28 +28,25 @@ class JobService {
     /**
      * Adds the job and starts it immidietly
      * @param {String|Date} pattern CronJob patter
-     * @param {String} channel 
+     * @param {Message} message Slack Message
      * @param {String} id 
+     * @param {enums.jobActions|string} one of vailiable actions
+     * @param cb
      */
-    add(pattern, channel, id) {
+    add(pattern, message, id, cb) {
         if(!id) {
             while (!id || this.jobs.ids.indexOf(id) > -1) {
                 id = Math.floor(Math.random() * 1000000);
             }
         }
 
-        var job = new Job(this.bot, id, pattern, channel, (bot, channel) => {
-            bot.say({
-                text: 'Job Fired',
-                channel: channel
-            });
-        });
+        const job = new Job(this.bot, id, pattern, message.channel, cb);
 
-        job.start(this.bot);
+        // Save job
         this.jobs.byId[id] = job;
         this.jobs.ids.push(id);
-        console.log('Job added' + id);
-        console.log(this.jobs);
+
+        job.start();
 
         return job;
     }
@@ -62,6 +59,7 @@ class JobService {
         if (!this.jobs.byId[id]) {
             throw new Error(`Job [${id}] not found`);
         }
+
         this.jobs.byId[id].stop();
 
         delete this.jobs.byId[id];

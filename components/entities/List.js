@@ -10,7 +10,7 @@ class List {
         const date = new Date();
         options = options || {};
         this.title = options.title || 'No name';
-        this.id = `${date.getFullYear()}${date.getMonth()}${date.getDay()}`;
+        this.id = `${date.getFullYear()}${date.getMonth()}${date.getWeek()}`;
         this.total = options.total || 0;    
         this.items = options.items || []; // array of options to select from list
     }
@@ -29,6 +29,17 @@ class List {
 
         text += `\n*Total votes*: ${this.total}`;
 
+        return text;
+    }
+
+    toEmail() {
+        let text = `${this.title}\n\n`;
+
+        this.items.forEach(item => {
+            text += item.toEmail();
+        });
+
+        text += `\nTotal votes: ${this.total}`;
         return text;
     }
 

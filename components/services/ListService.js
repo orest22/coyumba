@@ -24,6 +24,7 @@ class ListService {
     /**
      * Get list by id
      * @param {*} listId 
+     * @todo refactor to use firebase byId
      */
     getListById(listId, cb) {
 
@@ -64,39 +65,40 @@ class ListService {
 
     /**
      * Get list
+     * @returns List
      */
     async getList() {
         try {
             let list;
             let items = [];
+            const date = new Date();
+            const listId = `${date.getFullYear()}${date.getMonth()}${date.getWeek()}`;
 
             // Try to get list from storage
-            list = await this.storage.lists.latest().then(dataSnapshot => {
+            list = await this.storage.lists.byId(listId).then(dataSnapshot => {
 
                 let storageList = null;
                 let total = 0;
-                
-                dataSnapshot.forEach(function(childSnapshot) {
-                    childSnapshot.child('items').forEach(item => {
+
+                if(dataSnapshot.exists()) {
+                    dataSnapshot.child('items').forEach(item => {
                         const listItem = new ListItem({
                             id: item.child('id').val(), 
                             title: item.child('title').val(),
                             users: helpers.jsonToArray(item.child('users').val(), object => new User(object))
                         });
-
+    
                         total += listItem.users.length;
-
+    
                         items.push(listItem);
                     });
-
+    
                     storageList = new List({
-                        title: childSnapshot.child('title').val(),
+                        title: dataSnapshot.child('title').val(),
                         items: items,
                         total: total,
                     });
-
-                    return true;
-                });
+                }
 
                 return storageList;
                 

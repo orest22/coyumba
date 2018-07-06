@@ -1,5 +1,8 @@
 let env = require('node-env-file');
+let extensions = require('./util/extensions');
 let MailService = require('./components/services/MailService');
+let YumbaBot = require('./components/entities/YumbaBot');
+
 try {
   env(__dirname + '/.env');
 } catch (error) {
@@ -11,7 +14,7 @@ if (!process.env.clientId || !process.env.clientSecret || !process.env.PORT) {
   process.exit(1);
 }
 
-let Botkit = require('botkit');
+let Botkit = require('botkit').slackbot;
 let debug = require('debug')('botkit:main');
 
 const mailgunOptions = {
@@ -21,22 +24,20 @@ const mailgunOptions = {
   }
 };
 
-const mailClient = new MailService(mailgunOptions);
-
-mailClient.sendText('oresthazda@gmail.com', 'Yumba Bot', 'This is Yumba - slack bot.').then(success => {
-  console.log(success);
-}).catch(error => {
-  console.log(error);
-});
+// mailClient.sendText('oresthazda@gmail.com', 'Yumba Bot', 'This is Yumba - slack bot.').then(success => {
+//   console.log(success);
+// }).catch(error => {
+//   console.log(error);
+// });
 
 
-let firebaseStorage = require('./components/services/FireBaseService')({
+const firebaseStorage = require('./components/services/FireBaseService')({
   apiKey: process.env.firebase_apikey,
   databaseURL: process.env.firebase_uri,
   authDomain: process.env.firebase_uri,
 });
 
-let bot_options = {
+const bot_options = {
   clientId: process.env.clientId,
   clientSecret: process.env.clientSecret,
   debug: true,
@@ -44,14 +45,15 @@ let bot_options = {
   studio_token: process.env.studio_token,
   studio_command_uri: process.env.studio_command_uri,
   storage: firebaseStorage,
+  mailClient: new MailService(mailgunOptions),
 };
 
 // Create the Botkit controller, which controls all instances of the bot.
-let controller = Botkit.slackbot(bot_options);
+let controller = new YumbaBot(bot_options);
 controller.startTicking();
 
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
-let webserver = require(__dirname + '/components/express_webserver.js')(
+const webserver = require(__dirname + '/components/express_webserver.js')(
   controller
 );
 

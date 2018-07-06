@@ -7,7 +7,8 @@ describe('LIST', function() {
     let listItem;
     let list;
     const user = new User({
-        id: 'User'
+        id: 'User',
+        name: 'Orest'
     });
     
     it('List created', function(){

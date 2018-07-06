@@ -21,13 +21,13 @@ class MailService {
                 to,
                 subject,
                 text,
-              }, (err, info) => {
+            }, (err, info) => {
                 if (err) {
-                  reject(err);
+                    reject(err);
                 } else {
-                  resolve(info);
+                    resolve(info);
                 }
-              });
+            });
         });
     }
 }

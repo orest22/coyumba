@@ -123,5 +123,5 @@ module.exports = {
     composeAttachments: composeAttachments,
     fileExists: fileExists,
     arrayToJSON: arrayToJSON,
-    jsonToArray: jsonToArray
+    jsonToArray: jsonToArray,
 };

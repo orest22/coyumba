@@ -24,15 +24,12 @@ let ls = new ListService({
 
 ls.getList().then(list => {
     const user = new User({
-        id: 'Orest'
+        id: 'Orest',
+        name: 'Name'
     });
-    console.log(list);
 
     list.toggleUserForItem(list.items[0].id, user);
     list.title = 'test';
-
-    console.log('Before save');
-    console.log(list.items);
 
     ls.save(list, function() {
         console.log('After saving');
