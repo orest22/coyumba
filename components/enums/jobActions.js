@@ -99,8 +99,18 @@ const poll = (options) => {
 
 };
 
+const test = (options) => {
+    options = options || {};
+    const {bot, channel, message} = options;
+    bot.say({
+        channel,
+        text: 'Test job fired'
+    });
+};
+
 
 module.exports = {
     email,
     poll,
+    test
 };

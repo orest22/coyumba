@@ -20,8 +20,7 @@ module.exports = function(jobArr, message, bot, controller, jm) {
                 if (!actionFunction) return false; // no action, just exit
 
                 job = jm.add(pattern, message, null, () => {
-                    console.log("MESSAGE DEBUG:");
-                    console.log(message);
+                    console.log('ADD JOB CHANNEL: '+message.channel);
                     actionFunction({
                         bot,
                         channel: message.channel,

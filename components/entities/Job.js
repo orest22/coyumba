@@ -67,16 +67,20 @@ class Job {
     print() {
 
         return new Promise((resolve, reject) => {
-            console.log('print job');
             this.bot.api.channels.info({
                 channel: this.channel
             }, (err, res) => {
                 if (res.ok == false) {
                     reject(res.error);
                 }
-
-                let channelName = res.channel.name;
-                resolve('[' + this.id + '] #' + channelName + ' ' + this.pattern);
+                
+                if(res.channel) {
+                    let channelName = res.channel.name;
+                    resolve('[' + this.id + '] #' + channelName + ' ' + this.pattern);
+                } else {
+                    reject(new Error('Job has to be created in the channel'));
+                }
+                
             });
         });
     }
