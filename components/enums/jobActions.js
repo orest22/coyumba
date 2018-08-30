@@ -102,9 +102,10 @@ const poll = (options) => {
 const test = (options) => {
     options = options || {};
     const {bot, channel, message} = options;
+    const d = new Date()
     bot.say({
         channel,
-        text: 'Test job fired'
+        text: `Test job fired at ${d}`
     });
 };
 
