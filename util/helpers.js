@@ -3,14 +3,14 @@ const fs = require('fs');
 
 /**
  * Returns an array of attachments 
- */ 
+ */
 function composeAttachments(actions) {
     // Spit actions in to attachments.
     // Max 4 actions per attachment
     let attachmetsAmount = Math.ceil(actions.length / 4);
     const attachments = [];
 
-    for(let i = 1; i <= attachmetsAmount; i++) {
+    for (let i = 1; i <= attachmetsAmount; i++) {
         const title = i === 1 ? 'Make your choice from list above.' : '';
         const start = (i - 1) * 4;
         const end = start + 4;
@@ -35,7 +35,7 @@ function composeAttachments(actions) {
 function toggleUser(item, user) {
     let str = '';
     let users = [];
-    const userSlackString= `<@${user}>`;
+    const userSlackString = `<@${user}>`;
     const blockquote = '\n&gt;';
     const userRegEx = /<@[^>]+>/g; //Matches , <@USER> | <@USER>,
     const itemArr = item.split(blockquote);
@@ -43,14 +43,14 @@ function toggleUser(item, user) {
 
     // save item title
     str = itemArr[0];
-    
-    if(usersString) {
+
+    if (usersString) {
         // Find all users in string
         users = usersString.match(userRegEx);
 
         // User is in list lets remove
-        if(users.indexOf(userSlackString) > -1) {
-            users = users.filter( user => user !== userSlackString);
+        if (users.indexOf(userSlackString) > -1) {
+            users = users.filter(user => user !== userSlackString);
         } else {
             users.push(userSlackString);
         }
@@ -62,7 +62,7 @@ function toggleUser(item, user) {
         str += `${blockquote} ${users.join(', ')}`;
     }
 
-    return  str.trim();
+    return str.trim();
 }
 
 /**
@@ -71,7 +71,7 @@ function toggleUser(item, user) {
  */
 function fileExists(path) {
     return new Promise((resolve) => {
-        fs.access(path,  (err) => {
+        fs.access(path, (err) => {
             if (err) {
                 resolve(false);
             } else {
@@ -88,9 +88,9 @@ function fileExists(path) {
 function arrayToJSON(arr) {
     let jsonArr = {};
 
-    if(Array.isArray(arr)) {
+    if (Array.isArray(arr)) {
         arr.forEach(element => {
-            if(element.toJSON) {
+            if (element.toJSON) {
                 jsonArr[element.id] = element.toJSON();
             }
         });
@@ -107,7 +107,7 @@ function arrayToJSON(arr) {
 function jsonToArray(json, decorator) {
     let arr = [];
 
-    if(json) {
+    if (json) {
         for (const key in json) {
             if (json.hasOwnProperty(key)) {
                 arr.push(decorator(json[key]));

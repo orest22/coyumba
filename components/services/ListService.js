@@ -4,7 +4,7 @@ const User = require('../entities/User');
 const helpers = require('../../util/helpers');
 
 class ListService {
-    
+
     constructor(options) {
         options = options || {};
         this.storage = options.storage || console.error('Storage wasn\'t set');
@@ -18,7 +18,7 @@ class ListService {
      * @param {Function} Callback
      */
     save(list, cb) {
-        this.storage.lists.save(list.toJSON(), cb); 
+        this.storage.lists.save(list.toJSON(), cb);
     }
 
     /**
@@ -28,16 +28,16 @@ class ListService {
      */
     getListById(listId, cb) {
 
-        this.storage.lists.get(String(listId), function(error, dataSnapshot) {
+        this.storage.lists.get(String(listId), function (error, dataSnapshot) {
             let items = [];
             let total = 0;
 
-            if(!dataSnapshot) {
+            if (!dataSnapshot) {
                 throw new Error(`List #${listId} not found`);
             }
 
             dataSnapshot.items.forEach(item => {
-                
+
                 const listItem = new ListItem({
                     id: item.id,
                     title: item.title,
@@ -47,8 +47,6 @@ class ListService {
 
                 items.push(listItem);
             });
-
-        
 
             const list = new List({
                 title: dataSnapshot.title,
@@ -80,19 +78,19 @@ class ListService {
                 let storageList = null;
                 let total = 0;
 
-                if(dataSnapshot.exists()) {
+                if (dataSnapshot.exists()) {
                     dataSnapshot.child('items').forEach(item => {
                         const listItem = new ListItem({
-                            id: item.child('id').val(), 
+                            id: item.child('id').val(),
                             title: item.child('title').val(),
                             users: helpers.jsonToArray(item.child('users').val(), object => new User(object))
                         });
-    
+
                         total += listItem.users.length;
-    
+
                         items.push(listItem);
                     });
-    
+
                     storageList = new List({
                         title: dataSnapshot.child('title').val(),
                         items: items,
@@ -101,16 +99,16 @@ class ListService {
                 }
 
                 return storageList;
-                
+
             });
 
             // If list is empty
-            if(!list) {
+            if (!list) {
                 console.log('From web site');
-               list = await this.scraper.getList().then(data => {
-                    
+                list = await this.scraper.getList().then(data => {
+
                     items = data.items.map((listItem, index) => new ListItem({
-                        id: index+1, 
+                        id: index + 1,
                         title: listItem
                     }));
 
@@ -122,7 +120,7 @@ class ListService {
                     console.log('Error: Wasn\'t able to fetch list.', error);
                 });
 
-                if(list) {
+                if (list) {
                     console.log(list);
                     this.save(list);
                 }

@@ -73,14 +73,14 @@ class Job {
                 if (res.ok == false) {
                     reject(res.error);
                 }
-                
-                if(res.channel) {
+
+                if (res.channel) {
                     let channelName = res.channel.name;
                     resolve('[' + this.id + '] job has been added #' + channelName + ' ' + this.pattern);
                 } else {
                     reject(new Error('Job has to be created in the channel'));
                 }
-                
+
             });
         });
     }

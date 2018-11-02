@@ -11,7 +11,7 @@ class List {
         options = options || {};
         this.title = options.title || 'No name';
         this.id = `${date.getFullYear()}${date.getMonth()}${date.getWeek()}`;
-        this.total = options.total || 0;    
+        this.total = options.total || 0;
         this.items = options.items || []; // array of options to select from list
     }
 
@@ -61,7 +61,7 @@ class List {
 
     updateTotal(toggle) {
         console.log('Update total', this.total);
-        if(toggle) {
+        if (toggle) {
             this.total += 1;
         } else {
             this.total -= 1;

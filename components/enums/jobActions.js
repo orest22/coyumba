@@ -9,8 +9,15 @@ const ScrapingService = require('../services/ScrapingService');
 const email = (options) => {
     options = options || {};
 
-    const {bot, channel, message} = options;
-    const { storage, mailService } = bot.botkit;
+    const {
+        bot,
+        channel,
+        message
+    } = options;
+    const {
+        storage,
+        mailService
+    } = bot.botkit;
     const emailTo = process.env.ADMIN_MAIL;
 
     let ls = new ListService({
@@ -18,10 +25,10 @@ const email = (options) => {
         scraper: new ScrapingService()
     });
 
-    ls.getList().then( list => {
+    ls.getList().then(list => {
         let text = list.toEmail();
 
-        if(bot) {
+        if (bot) {
 
             const args = {
                 channel,
@@ -33,13 +40,13 @@ const email = (options) => {
                 bot.say(args);
             }).catch(error => {
                 bot.say({
-                    channel, 
+                    channel,
                     text: error.message
                 });
             });
 
         }
-        
+
     });
 };
 
@@ -50,23 +57,29 @@ const email = (options) => {
 const poll = (options) => {
     options = options || {};
 
-    const {bot, channel, message} = options;
+    const {
+        bot,
+        channel,
+        message
+    } = options;
     const isDirect = options.isDirect || false;
-    const { storage } = bot.botkit;
+    const {
+        storage
+    } = bot.botkit;
 
     let ls = new ListService({
         storage: storage,
         scraper: new ScrapingService()
     });
 
-    ls.getList().then( list => {
+    ls.getList().then(list => {
         let text = '';
         let actions = [];
 
         text = list.toSlack();
 
         // Create actions
-        list.items.forEach( item => {
+        list.items.forEach(item => {
             actions.push({
                 'name': item.id,
                 'text': item.id,
@@ -77,7 +90,7 @@ const poll = (options) => {
 
         const attachments = composeAttachments(actions);
 
-        if(bot) {
+        if (bot) {
 
             const args = {
                 text: text,
@@ -88,21 +101,25 @@ const poll = (options) => {
             };
 
             // Send menu list
-            if(message && isDirect) {
+            if (message && isDirect) {
                 bot.reply(message, args);
             } else {
                 bot.say(args);
             }
         }
-        
+
     });
 
 };
 
 const test = (options) => {
     options = options || {};
-    const {bot, channel, message} = options;
-    const d = new Date()
+    const {
+        bot,
+        channel,
+        message
+    } = options;
+    const d = new Date();
     bot.say({
         channel,
         text: `Test job fired at ${d}`

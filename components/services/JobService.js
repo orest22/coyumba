@@ -34,7 +34,7 @@ class JobService {
      * @param cb
      */
     add(pattern, message, id, cb) {
-        if(!id) {
+        if (!id) {
             while (!id || this.jobs.ids.indexOf(id) > -1) {
                 id = Math.floor(Math.random() * 1000000);
             }
@@ -63,7 +63,7 @@ class JobService {
         this.jobs.byId[id].stop();
 
         delete this.jobs.byId[id];
-        this.jobs.ids = this.jobs.ids.filter( jobId => jobId !== id );
+        this.jobs.ids = this.jobs.ids.filter(jobId => jobId !== id);
     }
 
     /**
@@ -71,7 +71,7 @@ class JobService {
      */
     list() {
         const result = this.jobs.ids.map((jobId) => this.jobs.byId[jobId].print());
-        
+
         return Promise.all(result);
     }
 

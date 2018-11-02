@@ -1,7 +1,7 @@
 const Firebase = require('firebase');
 
 
-module.exports = function(config) {
+module.exports = function (config) {
 
     if (!config || !config.databaseURL || !config.apiKey) {
         throw new Error('firebase_uri is required.');
@@ -58,7 +58,7 @@ module.exports = function(config) {
  * @returns {Function} The get function
  */
 function get(firebaseRef) {
-    return function(id, cb) {
+    return function (id, cb) {
         firebaseRef.child(id).once('value', success, cb);
 
         function success(records) {
@@ -74,7 +74,7 @@ function get(firebaseRef) {
  * @returns {Function} The save function
  */
 function save(firebaseRef) {
-    return function(data, cb) {
+    return function (data, cb) {
         var firebase_update = {};
         firebase_update[data.id] = data;
         firebaseRef.update(firebase_update, cb);
@@ -88,7 +88,7 @@ function save(firebaseRef) {
  * @returns {Function} The all function
  */
 function all(firebaseRef) {
-    return function(cb) {
+    return function (cb) {
         firebaseRef.once('value', success, cb);
 
         function success(records) {
@@ -98,7 +98,7 @@ function all(firebaseRef) {
                 return cb(null, []);
             }
 
-            var list = Object.keys(results).map(function(key) {
+            var list = Object.keys(results).map(function (key) {
                 return results[key];
             });
 
@@ -112,14 +112,14 @@ function all(firebaseRef) {
  * @param {*} firebaseRef 
  */
 function byId(firebaseRef) {
-    return function(id) {
+    return function (id) {
         console.log('BY ID:', id);
         return firebaseRef.child(id).once('value');
     };
 }
 
 function set(firebaseRef) {
-    return function(property, value, cb) {
+    return function (property, value, cb) {
         firebaseRef.child(property).set(value, cb);
     };
 }

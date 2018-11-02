@@ -44,9 +44,9 @@ class ListItem {
      * @param {Function} callback 
      */
     removeUser(user, callback) {
-        const newUsers = this.users.filter( u => u.id !== user.id );
+        const newUsers = this.users.filter(u => u.id !== user.id);
 
-        if(newUsers.length < this.users.length) {
+        if (newUsers.length < this.users.length) {
             this.users = newUsers;
             // Call callback when user get removed
             callback && callback(false);
@@ -56,12 +56,12 @@ class ListItem {
     }
 
     toSlack() {
-        let users  = this.users.map( user => `<@${user.id}>`);
-        let item =  `*${this.id}.* ${this.title}.\n`;
-        if(users.length) {
-            item  += `\n&gt;${users.join(', ')}\n`;
+        let users = this.users.map(user => `<@${user.id}>`);
+        let item = `*${this.id}.* ${this.title}.\n`;
+        if (users.length) {
+            item += `\n&gt;${users.join(', ')}\n`;
         }
-        
+
         return item;
     }
 
