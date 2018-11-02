@@ -76,7 +76,7 @@ class Job {
                 
                 if(res.channel) {
                     let channelName = res.channel.name;
-                    resolve('[' + this.id + '] #' + channelName + ' ' + this.pattern);
+                    resolve('[' + this.id + '] job has been added #' + channelName + ' ' + this.pattern);
                 } else {
                     reject(new Error('Job has to be created in the channel'));
                 }

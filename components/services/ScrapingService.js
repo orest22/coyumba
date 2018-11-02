@@ -4,7 +4,9 @@ const fileExists = require('../../util/helpers').fileExists;
 class ScrapingService {
     static async  openBrowser() {
         try {
-            return await puppeteer.launch();
+            return await puppeteer.launch({
+                args: process.env.IS_HEROKU ? ['--no-sandbox', '--disable-setuid-sandbox'] : []
+            });
         } catch(e) {
             console.log('Error: Cant open browser.');
         }
