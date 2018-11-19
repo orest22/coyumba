@@ -12,8 +12,8 @@ module.exports = function (config) {
     var rootRef = Firebase.database().ref(),
         teamsRef = rootRef.child('teams'),
         usersRef = rootRef.child('users'),
-        listRef = rootRef.child('lists'),
-        settingsRef = rootRef.child('settings'),
+        listRef = teamsRef.child('lists'),
+        settingsRef = teamsRef.child('settings'),
         channelsRef = rootRef.child('channels');
 
     return {
