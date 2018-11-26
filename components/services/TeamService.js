@@ -83,9 +83,11 @@ class TeamService {
      * @param {*} team 
      */
     removeAllJobs(team) {
-        team.jobs.ids.forEach(id => {
-            team.removeJob(id);
-        });
+        if(team) {
+            team.jobs.ids.forEach(id => {
+                team.removeJob(id);
+            });
+        }
     }
 
     /**

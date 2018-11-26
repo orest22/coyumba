@@ -51,12 +51,12 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                     }
                     break;
                 case 'stop':
-                    teamService.removeAllJobs();
-                    bot.replyPrivate(message, 'All jobs have been stoped');
+                    teamService.removeAllJobs(team);
+                    bot.replyPrivate(message, 'All jobs have been stopped');
                     break;
                 case 'list':
                     jobsList = teamService.listJobsFor(team);
-                    if (jobsList) {
+                    if (jobsList.length) {
                         bot.replyPrivate(message, `List: \n${jobsList.join('\n')}`);
                     } else {
                         bot.replyPrivate(message, `List is empty for Team: ${team.name}`);

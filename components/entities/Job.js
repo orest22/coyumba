@@ -64,7 +64,7 @@ class Job {
      * Print job to channel
      */
     print() {
-        return '[' + this.id + '] job has been added <#' + this.channel + '>. Job will fire with interval: ' + this.pattern;
+        return '[' + this.id + '] job has been added to <#' + this.channel + '>. Job will fire with interval: ' + this.pattern;
     }
 
     /**
