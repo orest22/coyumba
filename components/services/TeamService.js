@@ -60,7 +60,7 @@ class TeamService {
      */
     addJobTo(team, job) {
         if (!job.id) {
-            while (!job.id || this.jobs.ids.indexOf(job.id) > -1) {
+            while (!job.id || team.jobs.ids.indexOf(job.id) > -1) {
                 job.id = Math.floor(Math.random() * 1000000);
             }
         }
