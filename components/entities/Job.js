@@ -91,7 +91,7 @@ class Job {
         console.log('[' + this.id + '] #' + ' Job ' + ' ' + this.pattern);
     }
 
-    toJson() {
+    toJSON() {
         return {
             id: this.id,
             pattern: this.pattern,
@@ -99,7 +99,7 @@ class Job {
         };
     }
 
-    static fromJson(options) {
+    static fromJSON(options) {
         // Make sure we have right action
         if(options.action) {
             const callback = JobActions[options.action];
