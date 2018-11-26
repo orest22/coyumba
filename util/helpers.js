@@ -100,9 +100,9 @@ function arrayToJSON(arr) {
 }
 
 /**
- * Converts onject to arrau
+ * Converts object to array
  * @param {Object} json 
- * @param {Function} decotator decorating function should always return
+ * @param {Function} decorator decorating function should always return
  */
 function jsonToArray(json, decorator) {
     let arr = [];
@@ -118,10 +118,45 @@ function jsonToArray(json, decorator) {
     return arr;
 }
 
+/**
+ * Normalizes array and returns an object {'byId', 'ids'}
+ * @param {Array} array array of plain Objects
+ * @param {Function} factory function that returns specific object
+ */
+function normalizeArray(array, factory) {
+
+    let byId = {};
+    let ids = [];
+
+    array.map(item => {
+        const obj = factory(obj);
+        ids.push(item.id);
+        byId[obj.id] = obj;
+    });
+
+    return {
+        byId: byId,
+        ids: ids
+    };
+}
+
+/**
+ * Returns array of plain objects. Objects should have toJSON method
+ * @todo Add check if toJSON method exists
+ * @param {Object} normalizedArray 
+ * @param {Array} normalizedArray.ids Array of ids
+ * @param {Object} normalizedArray.byId Object that holds id: Object
+ */
+function denormalizeArray(normalizedArray) {
+    return normalizedArray.ids.map(id => normalizeArray.byId[id].toJSON());
+}
+
 module.exports = {
     toggleUser: toggleUser,
     composeAttachments: composeAttachments,
     fileExists: fileExists,
     arrayToJSON: arrayToJSON,
     jsonToArray: jsonToArray,
+    normalizeArray: normalizeArray,
+    denormalizeArray: denormalizeArray
 };

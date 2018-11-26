@@ -1,7 +1,6 @@
-let env = require('node-env-file');
-let extensions = require('./util/extensions');
-let MailService = require('./components/services/MailService');
-let YumbaBot = require('./components/entities/YumbaBot');
+const env = require('node-env-file');
+const MailService = require('./components/services/MailService');
+const YumbaBot = require('./components/entities/YumbaBot');
 
 try {
   env(__dirname + '/.env');
@@ -14,8 +13,7 @@ if (!process.env.clientId || !process.env.clientSecret || !process.env.PORT) {
   process.exit(1);
 }
 
-let Botkit = require('botkit').slackbot;
-let debug = require('debug')('botkit:main');
+const debug = require('debug')('botkit:main');
 
 const mailgunOptions = {
   auth: {
@@ -23,12 +21,6 @@ const mailgunOptions = {
     domain: process.env.MAILGUN_DOMAIN,
   }
 };
-
-// mailClient.sendText('oresthazda@gmail.com', 'Yumba Bot', 'This is Yumba - slack bot.').then(success => {
-//   console.log(success);
-// }).catch(error => {
-//   console.log(error);
-// });
 
 
 const firebaseStorage = require('./components/services/FireBaseService')({

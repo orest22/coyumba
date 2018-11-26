@@ -1,66 +1,79 @@
 const JobActions = require('../components/enums/jobActions');
+const Job = require('../components/entities/Job');
 
-module.exports = function(jobArr, message, bot, controller, jm) {
-    let job,
-        pattern,
+module.exports = function (jobArr, message, bot, controller, teamService) {
+    let pattern,
         action;
 
     if (!jobArr[1]) return;
 
-    switch (jobArr[1]) {
-        case 'add':
-            action = jobArr[2] || null;
+    // Ge the team
+    try {
+        teamService.getTeamById(bot.team_info.id, (team) => {
+            // We should have team here
 
-            pattern = jobArr.splice(3).join(' '); // rest should be pattern
+            switch (jobArr[1]) {
+                case 'add':
+                    action = jobArr[2] || null;
 
-            // if pattern and action was set
-            if (pattern && action) {
-                const actionFunction = JobActions[action] || false;
+                    pattern = jobArr.splice(3).join(' '); // rest should be pattern
 
-                if (!actionFunction) return false; // no action, just exit
+                    // if pattern and action was set
+                    if (pattern && action) {
+                        const actionFunction = JobActions[action] || false;
 
-                job = jm.add(pattern, message, null, () => {
-                    console.log('ADD JOB CHANNEL: '+message.channel);
-                    actionFunction({
-                        bot,
-                        channel: message.channel,
-                        controller,
-                        message,
-                    });
-                });
+                        if (!actionFunction) return false; // no action, just exit
 
-                if (job) {
-                    job.print().then(jobInfo => {
-                        bot.replyPrivate(message, jobInfo);
-                    }).catch(err => {
+                        const job = new Job({
+                            bot: bot,
+                            channel: message.channel,
+                            action: action,
+                            pattern: pattern,
+                            callback: () => {
+                                actionFunction({
+                                    bot,
+                                    channel: message.channel,
+                                    controller,
+                                    message,
+                                });
+                            }
+                        });
+
+                        // Add job to the team
+                        teamService.addJobFor(team, job);
+
+                        // Reply with job info
+                        job.print().then(jobInfo => {
+                            bot.replyPrivate(message, jobInfo);
+                        }).catch(err => {
+                            bot.replyPrivate(message, err.message);
+                        });
+                    }
+                    break;
+                case 'stop':
+                    teamService.removeAllJobs();
+                    bot.replyPrivate(message, 'All jobs have been stoped');
+                    break;
+                case 'list':
+                    teamService.listJobsFor(team).then(
+                        list => {
+                            if (list.length) {
+                                bot.replyPrivate(message, `List: \n${list.join('\n')}`);
+                            } else {
+                                bot.replyPrivate(message, 'List is empty');
+                            }
+                        }
+                    ).catch(err => {
+                        console.log(err);
                         bot.replyPrivate(message, err.message);
                     });
-                } else {
-                    bot.replyPrivate(message, `Job wasn't created for action: [${action}]`);
-                }
+                    break;
+                default:
+                    break;
             }
-            break;
-        case 'stop':
-            jm.jobs.ids.forEach(jobID => {
-                jm.remove(jobID);
-            });
-            bot.replyPrivate(message, 'All jobs have been stoped');
-            break;
-        case 'list':
-            jm.list().then(
-                list => {
-                    if (list.length) {
-                        bot.replyPrivate(message, `List: \n${list.join('\n')}`);
-                    } else {
-                        bot.replyPrivate(message, 'List is empty');
-                    }
-                }
-            ).catch(err => {
-                console.log(err);
-                bot.replyPrivate(message, err.message);
-            });
-            break;
-        default:
-            break;
+
+        });
+    } catch (error) {
+        bot.replyPrivate(message, error.message);
     }
 };

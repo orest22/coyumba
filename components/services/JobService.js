@@ -1,4 +1,3 @@
-const Job = require('../entities/Job');
 /**
  * Manages jobs
  */
@@ -8,12 +7,11 @@ class JobService {
      * Constructor
      * @param {SlackBot} bot Current Bot
      */
-    constructor(bot) {
+    constructor() {
         this.jobs = {
             ids: [],
             byId: {}
         };
-        this.bot = bot;
     }
 
     /**
@@ -22,29 +20,26 @@ class JobService {
      * @return {Job}
      */
     get(id) {
-        return this.jobs[id];
+        return this.jobs.byId[id];
     }
 
     /**
-     * Adds the job and starts it immidietly
-     * @param {String|Date} pattern CronJob patter
-     * @param {Message} message Slack Message
-     * @param {String} id 
-     * @param {enums.jobActions|string} one of vailiable actions
-     * @param cb
+     * Adds the job and starts it immediately
+     * @param {channel} Slack channel where the job will fire. Team should have default channel for the bot
+     * @param {Job} Cron Job
      */
-    add(pattern, message, id, cb) {
-        if (!id) {
-            while (!id || this.jobs.ids.indexOf(id) > -1) {
-                id = Math.floor(Math.random() * 1000000);
+    add(channel, job) {
+        if (!job.id) {
+            while (!job.id || this.jobs.ids.indexOf(job.id) > -1) {
+                job.id = Math.floor(Math.random() * 1000000);
             }
         }
 
-        const job = new Job(this.bot, id, pattern, message.channel, cb);
+        job.channel = channel;
 
         // Save job
-        this.jobs.byId[id] = job;
-        this.jobs.ids.push(id);
+        this.jobs.byId[job.id] = job;
+        this.jobs.ids.push(job.id);
 
         job.start();
 

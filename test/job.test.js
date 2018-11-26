@@ -1,30 +1,45 @@
 const expect = require('chai').expect;
-const JobManager = require('../components/cron/job-manager.js');
+const Team = require('../components/entities/Team');
+const Job = require('../components/entities/Job');
+const NormalizedStructure = require('../components/entities/NormalizedStructure');
 
 /**
  * Job Manager test suite
  */
-describe('Job Manager', function() {
-    const bot = {},
-        jm = new JobManager(bot),
-        jobId = '1';
+describe('[Jobs For Team]', function() {
+    const team = new Team({}),
+            jobId = '1';
 
-    it('job manager created', function() {
-        expect(jm).to.have.property('jobs').that.is.a('object');
+    it('Team created', function() {
+        console.log(typeof team.jobs);
+        expect(team.jobs).to.be.a('object');
     });
 
-    it(`add Job [${jobId}]`, function() {
-        jm.add('* * * * * 5', 'channel', jobId);
-        expect(jm.jobs).to.have.property(jobId);
+    it(`addJob [${jobId}]`, function() {
+        const callback  = () => {};
+        const job = new Job({
+            pattern: '* * * * * 5',
+            id: jobId,
+            channel: 'channel',
+            callback,
+            action: 'test',
+        });
+        team.addJob(job);
+        expect(team.jobs.byId).to.have.property(jobId);
     });
 
-    it(`job [${jobId}] is running`, function() {
-        expect(jm.get(jobId).cronJob.running).to.be.true;
+    it(`getJobById [${jobId}]`, function() {
+        const job = team.getJobById(jobId);
+        expect(job.id).to.equal(jobId);
     });
 
-    it(`remove Job [${jobId}]`, function() {
-        jm.remove(jobId);
-        expect(jm.jobs).not.to.have.property(jobId);
+    // it(`job [${jobId}] is running`, function() {
+    //     expect(jm.get(jobId).cronJob.running).to.be.true;
+    // });
+
+    it(`removeJob [${jobId}]`, function() {
+        team.removeJob(jobId);
+        expect(team.jobs.byId).not.to.have.property(jobId);
     });
 
 });
