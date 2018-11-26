@@ -64,24 +64,7 @@ class Job {
      * Print job to channel
      */
     print() {
-
-        return new Promise((resolve, reject) => {
-            this.bot.api.channels.info({
-                channel: this.channel
-            }, (err, res) => {
-                if (res.ok == false) {
-                    reject(res.error);
-                }
-
-                if (res.channel) {
-                    let channelName = res.channel.name;
-                    resolve('[' + this.id + '] job has been added #' + channelName + '. Job will fire with interval: ' + this.pattern);
-                } else {
-                    reject(new Error('Job has to be created in the channel'));
-                }
-
-            });
-        });
+        return '[' + this.id + '] job has been added <#' + this.channel + '>. Job will fire with interval: ' + this.pattern;
     }
 
     /**
@@ -95,7 +78,8 @@ class Job {
         return {
             id: this.id,
             pattern: this.pattern,
-            action: this.action
+            action: this.action,
+            channel: this.channel
         };
     }
 

@@ -12,6 +12,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
     try {
         teamService.getTeamById(bot.team_info.id, (team) => {
             // We should have team here
+            let jobsList = [];
 
             switch (jobArr[1]) {
                 case 'add':
@@ -45,12 +46,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
 
                         // Save the new team with recently added job
                         teamService.save(team, () => {
-                            // Reply with job info
-                            job.print().then(jobInfo => {
-                                bot.replyPrivate(message, jobInfo);
-                            }).catch(err => {
-                                bot.replyPrivate(message, err.message);
-                            });
+                            bot.replyPrivate(message, job.print());
                         });
                     }
                     break;
@@ -59,18 +55,13 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                     bot.replyPrivate(message, 'All jobs have been stoped');
                     break;
                 case 'list':
-                    teamService.listJobsFor(team).then(
-                        list => {
-                            if (list.length) {
-                                bot.replyPrivate(message, `List: \n${list.join('\n')}`);
-                            } else {
-                                bot.replyPrivate(message, `List is empty for Team: ${team.name}`);
-                            }
-                        }
-                    ).catch(err => {
-                        console.log(err);
-                        bot.replyPrivate(message, err.message);
-                    });
+                    jobsList = teamService.listJobsFor(team);
+                    if (jobsList) {
+                        bot.replyPrivate(message, `List: \n${jobsList.join('\n')}`);
+                    } else {
+                        bot.replyPrivate(message, `List is empty for Team: ${team.name}`);
+                    }
+                    
                     break;
                 default:
                     break;

@@ -95,7 +95,7 @@ class TeamService {
     listJobsFor(team) {
         const result = team.jobs.ids.map((jobId) => team.jobs.byId[jobId].print());
 
-        return Promise.all(result);
+        return result;
     }
 
     /**
