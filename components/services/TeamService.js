@@ -58,14 +58,14 @@ class TeamService {
      * @param {channel} Slack channel where the job will fire. Team should have default channel for the bot
      * @param {Job} Cron Job
      */
-    addJobTo(team, channel, job) {
+    addJobTo(team, job) {
         if (!job.id) {
             while (!job.id || this.jobs.ids.indexOf(job.id) > -1) {
                 job.id = Math.floor(Math.random() * 1000000);
             }
         }
-
-        job.channel = channel;
+        
+        team.addJob(job);
 
         return job;
     }
