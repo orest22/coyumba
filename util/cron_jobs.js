@@ -53,7 +53,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                 case 'stop':
                     teamService.removeAllJobs(team);
                     // Save team
-                    this.save(team, () => {
+                    teamService.save(team, () => {
                         bot.replyPrivate(message, 'All jobs have been stopped');
                     });
 
