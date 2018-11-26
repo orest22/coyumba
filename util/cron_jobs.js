@@ -10,7 +10,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
 
     // Ge the team
     try {
-        TeamService.getTeamById(bot.team_info.id, (team) => {
+        teamService.getTeamById(bot.team_info.id, (team) => {
             // We should have team here
 
             switch (jobArr[1]) {
