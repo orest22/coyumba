@@ -148,7 +148,7 @@ function normalizeArray(array, factory) {
  * @param {Object} normalizedArray.byId Object that holds id: Object
  */
 function denormalizeArray(normalizedArray) {
-    return normalizedArray.ids.map(id => normalizeArray.byId[id].toJSON());
+    return normalizedArray.ids.map(id => normalizedArray.byId[id].toJSON());
 }
 
 module.exports = {
