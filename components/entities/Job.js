@@ -1,4 +1,5 @@
-var CronJob = require('cron').CronJob;
+const CronJob = require('cron').CronJob;
+const JobActions = require('../enums/jobActions');
 var timezone = process.env.TIMEZONE;
 
 /**
@@ -9,18 +10,16 @@ class Job {
 
     /**
      * 
-     * @param {Object} bot Slack bot
-     * @param {String} id Job id
-     * @param {String|Date} pattern CronJob string 
-     * @param {String} channel Slack Channel id
-     * @param {Function} callback 
+     * @param {Object} options
      */
-    constructor(bot, id, pattern, channel, callback) {
-        this.bot = bot;
-        this.id = id;
-        this.channel = channel;
-        this.callback = callback;
-        this.pattern = pattern;
+    constructor(options) {
+        options = options || {};
+        this.bot = options.bot;
+        this.id = options.id;
+        this.channel = options.channel || new Error('Channel wasn\'t set');
+        this.callback = options.callback || new Error('Callback wasn\'t set');
+        this.pattern = options.pattern || new Error('Pattern wasn\'t set');
+        this.action = options.action || 'No name';
     }
 
     /**
@@ -76,7 +75,7 @@ class Job {
 
                 if (res.channel) {
                     let channelName = res.channel.name;
-                    resolve('[' + this.id + '] job has been added #' + channelName + ' ' + this.pattern);
+                    resolve('[' + this.id + '] job has been added #' + channelName + '. Job will fire with interval: ' + this.pattern);
                 } else {
                     reject(new Error('Job has to be created in the channel'));
                 }
@@ -86,10 +85,28 @@ class Job {
     }
 
     /**
-     * Helper method for debuging purpose
+     * Helper method for debugging purpose
      */
     debug() {
         console.log('[' + this.id + '] #' + ' Job ' + ' ' + this.pattern);
+    }
+
+    toJson() {
+        return {
+            id: this.id,
+            pattern: this.pattern,
+            action: this.action
+        };
+    }
+
+    static fromJson(options) {
+        // Make sure we have right action
+        if(options.action) {
+            const callback = JobActions[options.action];
+            options.callback = callback;
+        }
+        
+        return new Job(options);
     }
 }
 

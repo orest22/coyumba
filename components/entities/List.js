@@ -51,7 +51,6 @@ class List {
         for (let i = 0; i < this.items.length; i++) {
             const element = this.items[i];
             if (element.id === id) {
-                console.log(element);
                 element.toggleUser(user, toggle => this.updateTotal(toggle));
             } else {
                 element.removeUser(user, toogle => this.updateTotal(toogle));
@@ -60,13 +59,11 @@ class List {
     }
 
     updateTotal(toggle) {
-        console.log('Update total', this.total);
         if (toggle) {
             this.total += 1;
         } else {
             this.total -= 1;
         }
-        console.log('Updated total', this.total);
     }
 
     toJSON() {

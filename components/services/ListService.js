@@ -2,7 +2,7 @@ const List = require('../entities/List');
 const ListItem = require('../entities/ListItem');
 const User = require('../entities/User');
 const helpers = require('../../util/helpers');
-
+require('../../util/extensions');
 class ListService {
 
     constructor(options) {

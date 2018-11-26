@@ -3,7 +3,7 @@ const List = require('../components/entities/List');
 const ListItem = require('../components/entities/ListItem');
 const User = require('../components/entities/User');
 
-describe('LIST', function() {
+describe('[LIST]', function() {
     let listItem;
     let list;
     const user = new User({
