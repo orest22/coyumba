@@ -25,7 +25,7 @@ class TeamService {
      * @param {String} teamId 
      * @param {*} cb 
      */
-    static getTeamById(teamId, cb) {
+    getTeamById(teamId, cb) {
         this.storage.teams.get(String(teamId), (error, jsonTeam) => {
             if (error) {
                 throw new Error(`Error: ${error}`);
@@ -64,7 +64,7 @@ class TeamService {
                 job.id = Math.floor(Math.random() * 1000000);
             }
         }
-        
+
         team.addJob(job);
 
         return job;
