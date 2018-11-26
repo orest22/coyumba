@@ -52,7 +52,11 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                     break;
                 case 'stop':
                     teamService.removeAllJobs(team);
-                    bot.replyPrivate(message, 'All jobs have been stopped');
+                    // Save team
+                    this.save(team, () => {
+                        bot.replyPrivate(message, 'All jobs have been stopped');
+                    });
+
                     break;
                 case 'list':
                     jobsList = teamService.listJobsFor(team);
@@ -61,7 +65,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                     } else {
                         bot.replyPrivate(message, `List is empty for Team: ${team.name}`);
                     }
-                    
+
                     break;
                 default:
                     break;
