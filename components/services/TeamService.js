@@ -83,8 +83,8 @@ class TeamService {
      * @param {*} team 
      */
     removeAllJobs(team) {
-        team.jobs.forEach(job => {
-            team.removeJob(job.id);
+        team.jobs.ids.forEach(id => {
+            team.removeJob(id);
         });
     }
 
@@ -93,7 +93,7 @@ class TeamService {
      * @param List all jobs for certain slack Team
      */
     listJobsFor(team) {
-        const result = team.ids.map((jobId) => team.jobs.byId[jobId].print());
+        const result = team.jobs.ids.map((jobId) => team.jobs.byId[jobId].print());
 
         return Promise.all(result);
     }
