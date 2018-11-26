@@ -15,6 +15,10 @@ class NormalizedStructure {
         }
         return structure;
     }
+
+    toJson() {
+        
+    }
 }
 
 module.exports = NormalizedStructure;
