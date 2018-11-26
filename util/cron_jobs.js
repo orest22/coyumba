@@ -61,7 +61,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                             if (list.length) {
                                 bot.replyPrivate(message, `List: \n${list.join('\n')}`);
                             } else {
-                                bot.replyPrivate(message, 'List is empty');
+                                bot.replyPrivate(message, `List is empty for Team: ${team.name}`);
                             }
                         }
                     ).catch(err => {
