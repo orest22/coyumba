@@ -1,5 +1,6 @@
 const JobActions = require('../components/enums/jobActions');
 const Job = require('../components/entities/Job');
+const TeamService = require('../components/services/TeamService');
 
 module.exports = function (jobArr, message, bot, controller, teamService) {
     let pattern,
@@ -9,7 +10,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
 
     // Ge the team
     try {
-        teamService.getTeamById(bot.team_info.id, (team) => {
+        TeamService.getTeamById(bot.team_info.id, (team) => {
             // We should have team here
 
             switch (jobArr[1]) {
@@ -40,7 +41,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                         });
 
                         // Add job to the team
-                        teamService.addJobFor(team, job);
+                        teamService.addJobTo(team, job);
 
                         // Reply with job info
                         job.print().then(jobInfo => {
