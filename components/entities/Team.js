@@ -67,11 +67,13 @@ class Team extends Entity {
     }
 
     removeJob(id) {
-        if (!this.jobs.byId[id]) {
+        const job = this.jobs.byId[id];
+
+        if (!job) {
             throw new Error(`Job [${id}] not found`);
         }
 
-        this.jobs.byId[id].stop();
+        job.stop();
 
         delete this.jobs.byId[id];
         this.jobs.ids = this.jobs.ids.filter(jobId => jobId !== id);

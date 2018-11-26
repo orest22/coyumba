@@ -46,7 +46,9 @@ class Job {
      * Stop it self
      */
     stop() {
-        this.cronJob.stop();
+        if(this.cronJob) {
+            this.cronJob.stop();
+        }
     }
 
     /**
