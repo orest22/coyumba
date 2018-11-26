@@ -43,11 +43,14 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                         // Add job to the team
                         teamService.addJobTo(team, job);
 
-                        // Reply with job info
-                        job.print().then(jobInfo => {
-                            bot.replyPrivate(message, jobInfo);
-                        }).catch(err => {
-                            bot.replyPrivate(message, err.message);
+                        // Save the new team with recently added job
+                        teamService.save(team, () => {
+                            // Reply with job info
+                            job.print().then(jobInfo => {
+                                bot.replyPrivate(message, jobInfo);
+                            }).catch(err => {
+                                bot.replyPrivate(message, err.message);
+                            });
                         });
                     }
                     break;

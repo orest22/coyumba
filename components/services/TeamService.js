@@ -14,7 +14,7 @@ class TeamService {
      * @param {Team} team 
      * @param {Function} cb 
      */
-    static save(team, cb) {
+    save(team, cb) {
         if (team) {
             this.storage.teams.save(team.toJSON(), cb);
         }
