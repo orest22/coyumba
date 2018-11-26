@@ -39,7 +39,7 @@ class Team extends Entity {
             createdBy: json.createdBy,
             bot: json.bot,
             lists: helpers.jsonToArray(json.lists, (object) => List.fromJSON(object)),
-            jobs: NormalizedStructure.fromJson(json.jobs, (options) => new Job(options)),
+            jobs: NormalizedStructure.fromJSON(json.jobs, (options) => new Job(options)),
             settings: json.settings,
         };
 

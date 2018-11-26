@@ -4,12 +4,12 @@ class NormalizedStructure {
         this.ids = [];
     }
 
-    static fromJson(array, factory) {
+    static fromJSON(array, factory) {
         let structure = new NormalizedStructure();
         if(array) {
             array.map(item => {
-                const obj = factory(obj);
-                structure.ids.push(item.id);
+                const obj = factory(item);
+                structure.ids.push(obj.id);
                 structure.byId[obj.id] = obj;
             });
         }
@@ -17,7 +17,7 @@ class NormalizedStructure {
     }
 
     toJson() {
-        
+
     }
 }
 
