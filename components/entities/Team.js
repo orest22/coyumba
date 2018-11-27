@@ -63,9 +63,13 @@ class Team extends Entity {
         // Save job
         this.jobs.byId[job.id] = job;
         this.jobs.ids.push(job.id);
-        //job.start();
     }
 
+    /**
+     * Removes job from the team
+     * @param {String} id Job uniq id
+     * @throws {Error} 
+     */
     removeJob(id) {
         const job = this.jobs.byId[id];
 
