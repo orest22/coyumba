@@ -1,4 +1,4 @@
-const CronJob = require('cron').CronJob;
+//const CronJob = require('cron').CronJob;
 const JobActions = require('../enums/jobActions');
 var timezone = process.env.TIMEZONE;
 
@@ -27,18 +27,18 @@ class Job {
      */
     start() {
         // Try to create the job
-        try {
-            this.cronJob = new CronJob(this.pattern, () => {
-                this.callback && this.callback(this.bot, this.channel);
-            }, null, false, timezone);
+        // try {
+        //     this.cronJob = new CronJob(this.pattern, () => {
+        //         this.callback && this.callback(this.bot, this.channel);
+        //     }, null, false, timezone);
 
-            this.cronJob.start();
+        //     this.cronJob.start();
 
-        } catch (err) {
-            console.log('Job not created');
-            this.debug();
-            console.log(err);
-        }
+        // } catch (err) {
+        //     console.log('Job not created');
+        //     this.debug();
+        //     console.log(err);
+        // }
 
     }
 
@@ -46,9 +46,9 @@ class Job {
      * Stop it self
      */
     stop() {
-        if(this.cronJob) {
-            this.cronJob.stop();
-        }
+        // if(this.cronJob) {
+        //     this.cronJob.stop();
+        // }
     }
 
     /**

@@ -63,7 +63,7 @@ class Team extends Entity {
         // Save job
         this.jobs.byId[job.id] = job;
         this.jobs.ids.push(job.id);
-        job.start();
+        //job.start();
     }
 
     removeJob(id) {

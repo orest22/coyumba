@@ -1,4 +1,5 @@
 const Team = require('../entities/Team');
+const ScheduleService = require('node-schedule');
 
 class TeamService {
 
@@ -31,7 +32,7 @@ class TeamService {
                 throw new Error(`Error: ${error}`);
             }
 
-            if(jsonTeam) {
+            if (jsonTeam) {
                 const team = Team.fromJSON(jsonTeam);
                 this.currentTeam = Team.fromJSON(jsonTeam); // cache current team
 
@@ -67,6 +68,11 @@ class TeamService {
 
         team.addJob(job);
 
+        // Schedule job
+        ScheduleService.scheduleJob(job.pattern, () => {
+            job.callback && job.callback(job.bot, job.channel);
+        });
+
         return job;
     }
 
@@ -76,6 +82,10 @@ class TeamService {
      */
     removeJobFrom(team, id) {
         team.removeJob(id);
+        const scheduled = ScheduleService.scheduledJobs[id];
+        if (scheduled) {
+            scheduled.cancel();
+        }
     }
 
     /**
@@ -83,7 +93,7 @@ class TeamService {
      * @param {*} team 
      */
     removeAllJobs(team) {
-        if(team) {
+        if (team) {
             team.jobs.ids.forEach(id => {
                 team.removeJob(id);
             });
