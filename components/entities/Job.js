@@ -93,10 +93,6 @@ class Job {
         }
 
         const job = new Job(options);
-        job.cronJob = new CronJob(this.pattern, () => {
-            this.callback && this.callback(this.bot, this.channel);
-        }, null, false, timezone);
-        
         return job;
     }
 }
