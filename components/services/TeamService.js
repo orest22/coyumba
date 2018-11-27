@@ -69,7 +69,7 @@ class TeamService {
         team.addJob(job);
 
         // Schedule job
-        ScheduleService.scheduleJob(job.pattern, () => {
+        ScheduleService.scheduleJob(job.id, job.pattern, () => {
             job.callback && job.callback(job.bot, job.channel);
         });
 
