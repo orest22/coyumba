@@ -95,7 +95,7 @@ class TeamService {
     removeAllJobs(team) {
         if (team) {
             team.jobs.ids.forEach(id => {
-                team.removeJob(id);
+                this.removeJobFrom(team, id);
             });
         }
     }

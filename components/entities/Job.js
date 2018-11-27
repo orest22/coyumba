@@ -1,6 +1,4 @@
-//const CronJob = require('cron').CronJob;
 const JobActions = require('../enums/jobActions');
-var timezone = process.env.TIMEZONE;
 
 /**
  * Cron Job wrapper
@@ -20,35 +18,6 @@ class Job {
         this.callback = options.callback || new Error('Callback wasn\'t set');
         this.pattern = options.pattern || new Error('Pattern wasn\'t set');
         this.action = options.action || 'No name';
-    }
-
-    /**
-     * Start CronJob
-     */
-    start() {
-        // Try to create the job
-        // try {
-        //     this.cronJob = new CronJob(this.pattern, () => {
-        //         this.callback && this.callback(this.bot, this.channel);
-        //     }, null, false, timezone);
-
-        //     this.cronJob.start();
-
-        // } catch (err) {
-        //     console.log('Job not created');
-        //     this.debug();
-        //     console.log(err);
-        // }
-
-    }
-
-    /**
-     * Stop it self
-     */
-    stop() {
-        // if(this.cronJob) {
-        //     this.cronJob.stop();
-        // }
     }
 
     /**

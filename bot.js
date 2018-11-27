@@ -44,6 +44,9 @@ const bot_options = {
 let controller = new YumbaBot(bot_options);
 controller.startTicking();
 
+
+// @todo load jobs per team 
+
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
 const webserver = require(__dirname + '/components/express_webserver.js')(
   controller
