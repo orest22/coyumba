@@ -73,8 +73,6 @@ class Team extends Entity {
             throw new Error(`Job [${id}] not found`);
         }
 
-        job.stop();
-
         delete this.jobs.byId[id];
         this.jobs.ids = this.jobs.ids.filter(jobId => jobId !== id);
     }
