@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const List = require('../components/entities/List');
 const ListItem = require('../components/entities/ListItem');
 const User = require('../components/entities/User');
+require('../util/extensions');
 
 describe('[LIST]', function () {
     let listItem;
