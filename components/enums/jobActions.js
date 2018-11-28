@@ -19,7 +19,7 @@ const email = (options) => {
         storage,
         mailService
     } = bot.botkit;
-    const emailTo = process.env.ADMIN_MAIL;
+    const emailTo = process.env.ADMIN_MAIL; //@TODO has to be moved to setting
 
     const teamService = new TeamService({
         bot: bot,
@@ -27,39 +27,26 @@ const email = (options) => {
     });
 
     teamService.getTeamById(bot.team_info.id, (team) => {
-        
+        const list = teamService.fetchListFor(team);
+        let text = list.toEmail();
+
+        if (bot) {
+            const args = {
+                channel,
+                text: `Yumba order has been sent to: ${emailTo}`
+            };
+
+            mailService.sendText(emailTo, 'Yumba Bot - Order', text).then(() => {
+                // Send menu list
+                bot.say(args);
+            }).catch(error => {
+                bot.say({
+                    channel,
+                    text: error.message
+                });
+            });
+        }
     });
-
-
-    // let ls = new ListService({
-    //     storage: storage,
-    //     scraper: new ScrapingService()
-    // });
-
-
-    // ls.fetchList().then(list => {
-    //     let text = list.toEmail();
-
-    //     if (bot) {
-
-    //         const args = {
-    //             channel,
-    //             text: `Yumba order has been sent to: ${emailTo}`
-    //         };
-
-    //         mailService.sendText(emailTo, 'Yumba Bot - Order', text).then(() => {
-    //             // Send menu list
-    //             bot.say(args);
-    //         }).catch(error => {
-    //             bot.say({
-    //                 channel,
-    //                 text: error.message
-    //             });
-    //         });
-
-    //     }
-
-    // });
 };
 
 /**
@@ -79,31 +66,29 @@ const poll = (options) => {
         storage
     } = bot.botkit;
 
-    let ls = new ListService({
+    const teamService = new TeamService({
+        bot: bot,
         storage: storage,
-        scraper: new ScrapingService()
     });
 
-    ls.fetchList().then(list => {
+    teamService.getTeamById(bot.team_info.id, (team) => {
+        const list = teamService.fetchListFor(team);
         let text = '';
         let actions = [];
 
-        text = list.toSlack();
+        if (list && bot) {
+            text = list.toSlack();
 
-        // Create actions
-        list.items.forEach(item => {
-            actions.push({
-                'name': item.id,
-                'text': item.id,
-                'value': `${list.id}|${item.id}`,
-                'type': 'button',
+            list.items.forEach(item => {
+                actions.push({
+                    'name': item.id,
+                    'text': item.id,
+                    'value': `${list.id}|${item.id}`,
+                    'type': 'button',
+                });
             });
-        });
 
-        const attachments = composeAttachments(actions);
-
-        if (bot) {
-
+            const attachments = composeAttachments(actions);
             const args = {
                 text: text,
                 attachment_type: 'default',
@@ -118,10 +103,10 @@ const poll = (options) => {
             } else {
                 bot.say(args);
             }
+
         }
 
     });
-
 };
 
 const test = (options) => {
