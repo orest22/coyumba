@@ -1,10 +1,7 @@
 let env = require('node-env-file');
-const ListService = require('../components/services/ListService');
 const FireBaseService = require('../components/services/FireBaseService');
-const ScrapingService = require('../components/services/ScrapingService');
 const User = require('../components/entities/User');
 const TeamService = require('../components/services/TeamService');
-const Team = require('../components/entities/Team');
 
 try {
     env('./.env');
@@ -18,11 +15,6 @@ const fireBaseStorage = FireBaseService({
     authDomain: process.env.firebase_uri,
 });
 
-
-let ls = new ListService({
-    storage: fireBaseStorage,
-    scraper: new ScrapingService()
-});
 
 const teamService = new TeamService({
     storage: fireBaseStorage

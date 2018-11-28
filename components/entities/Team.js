@@ -28,8 +28,8 @@ class Team extends Entity {
             url: this.url,
             createdBy: this.createdBy,
             bot: this.bot,
-            lists: helpers.denormalizeArray(this.lists),
-            jobs: helpers.denormalizeArray(this.jobs),
+            lists: this.lists.toJSON(),
+            jobs: this.jobs.toJSON(),
             settings: this.settings,
         };
     }
