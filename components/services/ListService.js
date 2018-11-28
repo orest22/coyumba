@@ -7,7 +7,7 @@ class ListService {
 
     constructor(options) {
         options = options || {};
-        this.storage = options.storage || console.error('Storage wasn\'t set');
+        this.storage = options.storage;
         this.scraper = options.scraper || console.error('Scraper wasn\'t set');
         this.list = null;
     }
@@ -65,66 +65,26 @@ class ListService {
      * Get list
      * @returns List
      */
-    async getList() {
+    async fetchList() {
         try {
             let list;
             let items = [];
-            const date = new Date();
-            const listId = `${date.getFullYear()}${date.getMonth()}${date.getWeek()}`;
 
-            // Try to get list from storage
-            list = await this.storage.lists.byId(listId).then(dataSnapshot => {
+            list = await this.scraper.getList().then(data => {
 
-                let storageList = null;
-                let total = 0;
+                items = data.items.map((listItem, index) => new ListItem({
+                    id: index + 1,
+                    title: listItem
+                }));
 
-                if (dataSnapshot.exists()) {
-                    dataSnapshot.child('items').forEach(item => {
-                        const listItem = new ListItem({
-                            id: item.child('id').val(),
-                            title: item.child('title').val(),
-                            users: helpers.jsonToArray(item.child('users').val(), object => new User(object))
-                        });
-
-                        total += listItem.users.length;
-
-                        items.push(listItem);
-                    });
-
-                    storageList = new List({
-                        title: dataSnapshot.child('title').val(),
-                        items: items,
-                        total: total,
-                    });
-                }
-
-                return storageList;
-
-            });
-
-            // If list is empty
-            if (!list) {
-                console.log('From web site');
-                list = await this.scraper.getList().then(data => {
-
-                    items = data.items.map((listItem, index) => new ListItem({
-                        id: index + 1,
-                        title: listItem
-                    }));
-
-                    return new List({
-                        items: items,
-                        title: data.title
-                    });
-                }).catch(error => {
-                    console.log('Error: Wasn\'t able to fetch list.', error);
+                return new List({
+                    items: items,
+                    title: data.title
                 });
 
-                if (list) {
-                    console.log(list);
-                    this.save(list);
-                }
-            }
+            }).catch(error => {
+                console.log('Error: Wasn\'t able to fetch list.', error);
+            });
 
             return list;
 

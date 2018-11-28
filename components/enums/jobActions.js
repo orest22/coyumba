@@ -1,6 +1,7 @@
 const composeAttachments = require('../../util/helpers').composeAttachments;
 const ListService = require('../services/ListService');
 const ScrapingService = require('../services/ScrapingService');
+const TeamService = require('../services/TeamService');
 
 /**
  * Email action
@@ -20,34 +21,45 @@ const email = (options) => {
     } = bot.botkit;
     const emailTo = process.env.ADMIN_MAIL;
 
-    let ls = new ListService({
+    const teamService = new TeamService({
+        bot: bot,
         storage: storage,
-        scraper: new ScrapingService()
     });
 
-    ls.getList().then(list => {
-        let text = list.toEmail();
-
-        if (bot) {
-
-            const args = {
-                channel,
-                text: `Yumba order has been sent to: ${emailTo}`
-            };
-
-            mailService.sendText(emailTo, 'Yumba Bot - Order', text).then(() => {
-                // Send menu list
-                bot.say(args);
-            }).catch(error => {
-                bot.say({
-                    channel,
-                    text: error.message
-                });
-            });
-
-        }
-
+    teamService.getTeamById(bot.team_info.id, (team) => {
+        
     });
+
+
+    // let ls = new ListService({
+    //     storage: storage,
+    //     scraper: new ScrapingService()
+    // });
+
+
+    // ls.fetchList().then(list => {
+    //     let text = list.toEmail();
+
+    //     if (bot) {
+
+    //         const args = {
+    //             channel,
+    //             text: `Yumba order has been sent to: ${emailTo}`
+    //         };
+
+    //         mailService.sendText(emailTo, 'Yumba Bot - Order', text).then(() => {
+    //             // Send menu list
+    //             bot.say(args);
+    //         }).catch(error => {
+    //             bot.say({
+    //                 channel,
+    //                 text: error.message
+    //             });
+    //         });
+
+    //     }
+
+    // });
 };
 
 /**
@@ -72,7 +84,7 @@ const poll = (options) => {
         scraper: new ScrapingService()
     });
 
-    ls.getList().then(list => {
+    ls.fetchList().then(list => {
         let text = '';
         let actions = [];
 

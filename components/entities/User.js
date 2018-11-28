@@ -16,6 +16,10 @@ class User extends Entity {
     toEmail() {
         return `- ${this.name}\n`;
     }
+
+    static fromJSON(json) {
+        return new User(json);
+    }
 }
 
 module.exports = User;

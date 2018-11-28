@@ -1,4 +1,5 @@
-const arrayToJSON = require('../../util/helpers').arrayToJSON;
+const {arrayToJSON, jsonToArray} = require('../../util/helpers');
+const User = require('./User');
 /**
  * List item
  */
@@ -78,6 +79,17 @@ class ListItem {
             title: this.title,
             users: arrayToJSON(this.users)
         };
+    }
+
+    /**
+     * Converts from plain json
+     * @param {Object} options 
+     */
+    static fromJSON(options) {
+        return new ListItem({
+            ...options,
+            users: jsonToArray(options.users, (obj) => User.fromJSON(obj))
+        });
     }
 
 }

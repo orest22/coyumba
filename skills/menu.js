@@ -27,8 +27,9 @@ module.exports = function(controller) {
         try {
             bot.startTyping(message);
             ScrapingService.getMenuImage().then((screenshotName) => {
-                console.log('Got The Image');
                 const link = `${process.env.URL}images/menu/${screenshotName}`;
+
+                bot.replyPrivate(message, 'Fetching image...');
                 
                 bot.reply(message, {
                     text: null,

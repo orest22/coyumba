@@ -1,5 +1,10 @@
-const Team = require('../entities/Team');
 const ScheduleService = require('node-schedule');
+const Team = require('../entities/Team');
+const List = require('../entities/List');
+const ListService = require('../services/ListService');
+const ScraperService = require('../services/ScrapingService');
+require('../../util/extensions');
+
 
 class TeamService {
 
@@ -8,17 +13,30 @@ class TeamService {
         this.bot = options.bot || new Error('Not bot set');
         this.storage = options.storage || new Error('No storage set');
         this.currentTeam = null;
+        this.listService = new ListService({
+            scraper: new ScraperService()
+        });
     }
 
     /**
      * Save team
      * @param {Team} team 
-     * @param {Function} cb 
+     * @return {Promise} 
      */
-    save(team, cb) {
-        if (team) {
-            this.storage.teams.save(team.toJSON(), cb);
-        }
+    save(team) {
+        return new Promise((resolve, reject) => {
+            if (team) {
+                this.storage.teams.save(team.toJSON(), (error) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve();
+                    }
+                });
+            } else {
+                reject(new Error('Team is not defined'));
+            }
+        });
     }
 
     /**
@@ -26,21 +44,23 @@ class TeamService {
      * @param {String} teamId 
      * @param {*} cb 
      */
-    getTeamById(teamId, cb) {
-        this.storage.teams.get(String(teamId), (error, jsonTeam) => {
-            if (error) {
-                throw new Error(`Error: ${error}`);
-            }
+    getTeamById(teamId) {
 
-            if (jsonTeam) {
-                const team = Team.fromJSON(jsonTeam);
-                this.currentTeam = Team.fromJSON(jsonTeam); // cache current team
+        return new Promise((resolve, reject) => {
+            this.storage.teams.get(String(teamId), (error, jsonTeam) => {
+                if (error) {
+                    throw new Error(`Error: ${error}`);
+                }
 
-                cb && cb(team);
-            } else {
-                console.log('Error: The team not found');
-            }
+                if (jsonTeam) {
+                    const team = Team.fromJSON(jsonTeam);
+                    this.currentTeam = Team.fromJSON(jsonTeam); // cache current team
 
+                    resolve(team);
+                } else {
+                    reject(new Error('Error: The team not found'));
+                }
+            });
         });
     }
 
@@ -118,6 +138,34 @@ class TeamService {
         team.ids.map((jobId) => team.jobs.byId[jobId].start());
     }
 
+    /**
+     * Fetches list for this week
+     * @param {Team} team 
+     * @returns {Team} updated team
+     */
+    async fetchListFor(team) {
+
+        const date = new Date();
+        const listId = `${date.getFullYear()}${date.getMonth()}${date.getWeek()}`;
+        let list = team.getListById(listId);
+
+        if (list) {
+            return list;
+        }
+
+        // We don't have current list in db yet
+        // No list lets fetch it from website
+        list = await this.listService.fetchList();
+
+        if (list) {
+            team.addList(list);
+        }
+
+        // Save to storage
+        await this.save(team);
+
+        return team.getListById(listId);
+    }
 }
 
 module.exports = TeamService;

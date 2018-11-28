@@ -1,4 +1,5 @@
-const arrayToJSON = require('../../util/helpers').arrayToJSON;
+const {arrayToJSON, jsonToArray} = require('../../util/helpers');
+const ListItem =  require('./ListItem');
 
 class List {
     /**
@@ -53,7 +54,7 @@ class List {
             if (element.id === id) {
                 element.toggleUser(user, toggle => this.updateTotal(toggle));
             } else {
-                element.removeUser(user, toogle => this.updateTotal(toogle));
+                element.removeUser(user, toggle => this.updateTotal(toggle));
             }
         }
     }
@@ -76,7 +77,10 @@ class List {
     }
 
     static fromJSON(json) {
-        return new List(json);
+        return new List({
+            ...json,
+            items: jsonToArray(json.items, (obj) => ListItem.fromJSON(obj))
+        });
     }
 }
 

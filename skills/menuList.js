@@ -147,10 +147,7 @@ module.exports = function(controller) {
     });
 
     // receive an interactive message, and reply with a message that will replace the original
-    controller.on('interactive_message_callback', function(bot, message) {
-
-        console.log(message);
-        
+    controller.on('interactive_message_callback', function(bot, message) {        
         // check message.actions and message.callback_id to see what action to take...
         if(message.callback_id === 'selectMenuItem') {
             const valueArr = message.actions[0].value.split('|');
@@ -176,7 +173,6 @@ module.exports = function(controller) {
                     });
     
                     ls.save(list, function() {
-                        console.log('List saved');
                         bot.replyInteractive(message, {
                             text: list.toSlack(),
                             mrkdwn: true,                

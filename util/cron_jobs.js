@@ -45,16 +45,20 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                         teamService.addJobTo(team, job);
 
                         // Save the new team with recently added job
-                        teamService.save(team, () => {
+                        teamService.save(team).then(() => {
                             bot.replyPrivate(message, job.print());
+                        }).catch((err) => {
+                            bot.replyPrivate(message, err.message);
                         });
                     }
                     break;
                 case 'stop':
                     teamService.removeAllJobs(team);
                     // Save team
-                    teamService.save(team, () => {
+                    teamService.save(team).then(() => {
                         bot.replyPrivate(message, 'All jobs have been stopped');
+                    }).catch((err) => {
+                        bot.replyPrivate(message, err.message);
                     });
 
                     break;

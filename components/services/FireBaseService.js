@@ -113,7 +113,6 @@ function all(firebaseRef) {
  */
 function byId(firebaseRef) {
     return function (id) {
-        console.log('BY ID:', id);
         return firebaseRef.child(id).once('value');
     };
 }
