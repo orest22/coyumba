@@ -37,7 +37,7 @@ teamService.getTeamById('T6BPHLXPB').then(async (team) => {
 
     teamService.save(team).then(() => {
         console.log('TEAM WITH NEW LISTS');
-    })
+    });
 
 }).catch(error => {
     console.log(error);
