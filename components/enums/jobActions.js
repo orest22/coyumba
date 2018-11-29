@@ -89,6 +89,8 @@ const poll = (options) => {
         let actions = [];
 
         if (list && bot) {
+            bot.botkit.debug('List', list);
+
             text = list.toSlack();
 
             list.items.forEach(item => {

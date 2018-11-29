@@ -149,7 +149,6 @@ class TeamService {
         const date = new Date();
         const listId = `${date.getFullYear()}${date.getMonth()}${date.getWeek()}`;
 
-        debug(`Fetching list by id ${listId}`);
         let list = team.getListById(listId);
 
         if (list) {
