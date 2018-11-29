@@ -3,6 +3,7 @@ const ListService = require('../components/services/ListService');
 const ScrapingService = require('../components/services/ScrapingService');
 const User = require('../components/entities/User');
 const pollAction = require('../components/enums/jobActions').poll;
+const debug = require('debug')('botkit:main');
 module.exports = function(controller) {
 
     let ls = new ListService({
@@ -33,7 +34,7 @@ module.exports = function(controller) {
         });
 
         try {
-
+            debug('Try to call poll Action');
             pollAction({
                 message,
                 bot,

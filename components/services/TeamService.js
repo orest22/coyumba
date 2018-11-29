@@ -4,6 +4,7 @@ const List = require('../entities/List');
 const ListService = require('../services/ListService');
 const ScraperService = require('../services/ScrapingService');
 require('../../util/extensions');
+const debug = require('debug')('botkit:teamService');
 
 
 class TeamService {
@@ -144,9 +145,11 @@ class TeamService {
      * @returns {Team} updated team
      */
     async fetchListFor(team) {
-
+        
         const date = new Date();
         const listId = `${date.getFullYear()}${date.getMonth()}${date.getWeek()}`;
+
+        debug(`Fetching list by id ${listId}`);
         let list = team.getListById(listId);
 
         if (list) {

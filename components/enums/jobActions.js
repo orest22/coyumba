@@ -2,6 +2,8 @@ const composeAttachments = require('../../util/helpers').composeAttachments;
 const ListService = require('../services/ListService');
 const ScrapingService = require('../services/ScrapingService');
 const TeamService = require('../services/TeamService');
+const debug = require('debug')('botkit:main');
+
 
 /**
  * Email action
@@ -26,7 +28,12 @@ const email = (options) => {
         storage: storage,
     });
 
+    debug('TeamService created');
+    debug(`TeamService id ${bot.team_info.id}`);
+
     teamService.getTeamById(bot.team_info.id, (team) => {
+        debug('TEAM');
+        debug(team);
         const list = teamService.fetchListFor(team);
         let text = list.toEmail();
 
@@ -70,6 +77,8 @@ const poll = (options) => {
         bot: bot,
         storage: storage,
     });
+
+    
 
     teamService.getTeamById(bot.team_info.id, (team) => {
         const list = teamService.fetchListFor(team);
