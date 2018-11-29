@@ -29,31 +29,30 @@ module.exports = function(controller) {
 
     controller.hears(['List'], 'direct_message,direct_mention', function(bot, message) {
 
-        test({
-            message,
-            bot,
-            channel: message.channel,
-            isDirect: true
-        });
+        // test({
+        //     message,
+        //     bot,
+        //     channel: message.channel,
+        //     isDirect: true
+        // });
         // bot.reply(message, {
         //     text: 'Fetching menu list...'
         // });
 
-        // try {
-        //     debug('Try to call poll Action');
-        //     poll({
-        //         message,
-        //         bot,
-        //         channel: message.channel,
-        //         isDirect: true
-        //     });
+        try {
+            bot.botkit.debug('Try to call poll Action');
+            poll({
+                message,
+                bot,
+                channel: message.channel,
+                isDirect: true
+            });
             
-        // } catch (error) {
-        //     console.log(error);
-        //     bot.reply(message, {
-        //        text: 'Error occurred..'
-        //     });
-        // }
+        } catch (error) {
+            bot.reply(message, {
+               text: 'Error occurred..'
+            });
+        }
 
 
         

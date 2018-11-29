@@ -78,9 +78,12 @@ const poll = (options) => {
         storage: storage,
     });
 
+    bot.botkit.debug('Team service created');
     
 
     teamService.getTeamById(bot.team_info.id, (team) => {
+        bot.botkit.debug('TEAM', team);
+
         const list = teamService.fetchListFor(team);
         let text = '';
         let actions = [];
