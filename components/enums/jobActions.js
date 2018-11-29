@@ -106,6 +106,8 @@ const poll = (options) => {
 
         }
 
+    }).catch(error => {
+        bot.reply(message, error.message);
     });
 };
 

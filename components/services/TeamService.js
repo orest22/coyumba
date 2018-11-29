@@ -49,7 +49,7 @@ class TeamService {
         return new Promise((resolve, reject) => {
             this.storage.teams.get(String(teamId), (error, jsonTeam) => {
                 if (error) {
-                    throw new Error(`Error: ${error}`);
+                    reject(new Error(`Error: ${teamId} ${error}`));
                 }
 
                 if (jsonTeam) {
