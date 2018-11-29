@@ -7,7 +7,9 @@ class NormalizedStructure {
     static fromJSON(obj, factory) {
         let structure = new NormalizedStructure();
         if (obj) {
-            structure.byId = Object.keys(obj).map((key) => factory(obj[key]));
+            Object.keys(obj).forEach((key) => {
+                structure.byId[key] = factory(obj[key]);
+            });
             structure.ids = Object.keys(obj);
         }
         return structure;

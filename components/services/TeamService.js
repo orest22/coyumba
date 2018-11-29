@@ -152,7 +152,7 @@ class TeamService {
         let list = team.getListById(listId);
 
         if (list) {
-            return list;
+            return Promise.resolve(list);
         }
 
         // We don't have current list in db yet

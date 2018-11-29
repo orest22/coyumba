@@ -31,9 +31,7 @@ const email = (options) => {
     debug('TeamService created');
     debug(`TeamService id ${bot.team_info.id}`);
 
-    teamService.getTeamById(bot.team_info.id, (team) => {
-        debug('TEAM');
-        debug(team);
+    teamService.getTeamById(bot.team_info.id).then((team) => {
         const list = teamService.fetchListFor(team);
         let text = list.toEmail();
 
@@ -53,6 +51,11 @@ const email = (options) => {
                 });
             });
         }
+    }).catch(error => {
+        bot.say({
+            channel,
+            text: error.message
+        });
     });
 };
 
@@ -78,13 +81,13 @@ const poll = (options) => {
         storage: storage,
     });
 
-    bot.botkit.debug('Team service created',bot.team_info.id);
-    
+    bot.botkit.debug('Team service created', bot.team_info.id);
 
-    teamService.getTeamById(bot.team_info.id).then((team) => {
+
+    teamService.getTeamById(bot.team_info.id).then(async(team) => {
         bot.botkit.debug('TEAM', team);
 
-        const list = teamService.fetchListFor(team);
+        const list = await teamService.fetchListFor(team);
         let text = '';
         let actions = [];
 
@@ -136,7 +139,7 @@ const test = (options) => {
         message
     } = options;
     const d = new Date();
-    bot.reply( message, {
+    bot.reply(message, {
         text: `Test job fired at ${d}`
     });
 };
