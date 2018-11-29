@@ -4,7 +4,6 @@ const List = require('../entities/List');
 const ListService = require('../services/ListService');
 const ScraperService = require('../services/ScrapingService');
 require('../../util/extensions');
-const debug = require('debug')('botkit:teamService');
 
 
 class TeamService {
