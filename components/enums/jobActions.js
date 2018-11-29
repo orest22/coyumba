@@ -78,10 +78,10 @@ const poll = (options) => {
         storage: storage,
     });
 
-    bot.botkit.debug('Team service created');
+    bot.botkit.debug('Team service created',bot.team_info.id);
     
 
-    teamService.getTeamById(bot.team_info.id, (team) => {
+    teamService.getTeamById(bot.team_info.id).then((team) => {
         bot.botkit.debug('TEAM', team);
 
         const list = teamService.fetchListFor(team);
@@ -119,6 +119,8 @@ const poll = (options) => {
         }
 
     }).catch(error => {
+        bot.botkit.debug('Team fetching error', error);
+
         bot.reply(message, error.message);
     });
 };
