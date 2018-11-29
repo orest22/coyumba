@@ -25,18 +25,11 @@ module.exports = function (controller) {
 
     controller.hears(['List'], 'direct_message,direct_mention', function (bot, message) {
 
-        // test({
-        //     message,
-        //     bot,
-        //     channel: message.channel,
-        //     isDirect: true
-        // });
-        // bot.reply(message, {
-        //     text: 'Fetching menu list...'
-        // });
+        bot.replyPrivate(message, {
+            text: 'Fetching menu list...'
+        });
 
         try {
-            bot.botkit.debug('Try to call poll Action');
             poll({
                 message,
                 bot,
