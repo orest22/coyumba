@@ -129,8 +129,7 @@ const test = (options) => {
         message
     } = options;
     const d = new Date();
-    bot.reply({
-        message,
+    bot.reply( message, {
         text: `Test job fired at ${d}`
     });
 };
