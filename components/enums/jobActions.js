@@ -31,8 +31,8 @@ const email = (options) => {
     debug('TeamService created');
     debug(`TeamService id ${bot.team_info.id}`);
 
-    teamService.getTeamById(bot.team_info.id).then((team) => {
-        const list = teamService.fetchListFor(team);
+    teamService.getTeamById(bot.team_info.id).then(async (team) => {
+        const list = await teamService.fetchListFor(team);
         let text = list.toEmail();
 
         if (bot) {

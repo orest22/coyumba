@@ -25,15 +25,15 @@ teamService.getTeamById('T6BPHLXPB').then(async (team) => {
 
     const list = await teamService.fetchListFor(team);
 
-    const user = new User({
-        id: 'Orest',	
-        name: 'Name'	
-    });
+    // const user = new User({
+    //     id: 'Orest',	
+    //     name: 'Name'	
+    // });
 
-    list.toggleUserForItem(list.items[0].id, user);
-    list.title = 'test';
+    // list.toggleUserForItem(list.items[0].id, user);
+    // list.title = 'test';
 
-    console.log(list);
+    console.log(list.toSlack());
 
     teamService.save(team).then(() => {
         console.log('TEAM WITH NEW LISTS');
