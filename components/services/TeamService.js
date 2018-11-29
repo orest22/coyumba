@@ -54,7 +54,7 @@ class TeamService {
 
                 if (jsonTeam) {
                     const team = Team.fromJSON(jsonTeam);
-                    this.currentTeam = Team.fromJSON(jsonTeam); // cache current team
+                    this.currentTeam = team; // cache current team
 
                     resolve(team);
                 } else {

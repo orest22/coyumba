@@ -11,6 +11,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
     // Ge the team
     try {
         teamService.getTeamById(bot.team_info.id).then((team) => {
+            bot.botkit.debug("TEAM", team);
             // We should have team here
             let jobsList = [];
 
@@ -64,6 +65,8 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                     break;
                 case 'list':
                     jobsList = teamService.listJobsFor(team);
+                    bot.botkit.debug('JOB LIST', jobsList);
+
                     if (jobsList.length) {
                         bot.replyPrivate(message, `List: \n${jobsList.join('\n')}`);
                     } else {
