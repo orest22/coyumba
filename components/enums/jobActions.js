@@ -128,8 +128,8 @@ const test = (options) => {
         message
     } = options;
     const d = new Date();
-    bot.say({
-        channel,
+    bot.reply({
+        message,
         text: `Test job fired at ${d}`
     });
 };

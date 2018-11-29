@@ -2,7 +2,7 @@ const composeAttachments = require('../util/helpers').composeAttachments;
 const ListService = require('../components/services/ListService');
 const ScrapingService = require('../components/services/ScrapingService');
 const User = require('../components/entities/User');
-const {poll} = require('../components/enums/jobActions');
+const {poll, test} = require('../components/enums/jobActions');
 const debug = require('debug')('botkit:main');
 module.exports = function(controller) {
 
@@ -29,22 +29,33 @@ module.exports = function(controller) {
 
     controller.hears(['List'], 'direct_message,direct_mention', function(bot, message) {
 
+        test({
+            message,
+            bot,
+            channel: message.channel,
+            isDirect: true
+        });
         // bot.reply(message, {
         //     text: 'Fetching menu list...'
         // });
 
-        try {
-            debug('Try to call poll Action');
-            poll({
-                message,
-                bot,
-                channel: message.channel,
-                isDirect: true
-            });
+        // try {
+        //     debug('Try to call poll Action');
+        //     poll({
+        //         message,
+        //         bot,
+        //         channel: message.channel,
+        //         isDirect: true
+        //     });
             
-        } catch (error) {
-            console.log(error);
-        }
+        // } catch (error) {
+        //     console.log(error);
+        //     bot.reply(message, {
+        //        text: 'Error occurred..'
+        //     });
+        // }
+
+
         
     });
 
