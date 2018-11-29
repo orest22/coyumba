@@ -122,6 +122,7 @@ const poll = (options) => {
 
 const test = (options) => {
     options = options || {};
+    debug('MESSAGE', message);
     const {
         bot,
         channel,
