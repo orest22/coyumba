@@ -48,15 +48,17 @@ controller.startTicking();
 // Load all running jobs for all teams
 firebaseStorage.teams.all((error, teams) => {
   teams.forEach((team) => {
-    Object.keys(team.jobs).forEach(function (key) {
-      const job = team.jobs[key];
-      if (job) {
-        // Schedule job
-        ScheduleService.scheduleJob(job.id, job.pattern, () => {
-          job.callback && job.callback(job.bot, job.channel);
-        });
-      }
-    });
+    if (team.jobs) {
+      Object.keys(team.jobs).forEach(function (key) {
+        const job = team.jobs[key];
+        if (job) {
+          // Schedule job
+          ScheduleService.scheduleJob(job.id, job.pattern, () => {
+            job.callback && job.callback(job.bot, job.channel);
+          });
+        }
+      });
+    }
   });
 });
 
