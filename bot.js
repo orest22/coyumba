@@ -2,6 +2,8 @@ const env = require('node-env-file');
 const MailService = require('./components/services/MailService');
 const ScheduleService = require('node-schedule');
 const YumbaBot = require('./components/entities/YumbaBot');
+const JobActions = require('../enums/jobActions');
+
 
 try {
   env(__dirname + '/.env');
@@ -54,7 +56,8 @@ firebaseStorage.teams.all((error, teams) => {
         if (job) {
           // Schedule job
           ScheduleService.scheduleJob(job.id, job.pattern, () => {
-            job.callback && job.callback(job.bot, job.channel);
+            const callback = JobActions[job.action];
+            callback(job.bot, job.channel);
           });
         }
       });
