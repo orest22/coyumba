@@ -1,5 +1,6 @@
 const env = require('node-env-file');
 const MailService = require('./components/services/MailService');
+const ScheduleService = require('node-schedule');
 const YumbaBot = require('./components/entities/YumbaBot');
 
 try {
@@ -44,6 +45,20 @@ const bot_options = {
 let controller = new YumbaBot(bot_options);
 controller.startTicking();
 
+// Load all running jobs for all teams
+firebaseStorage.teams.all((error, teams) => {
+  teams.forEach((team) => {
+    Object.keys(team.jobs).forEach(function (key) {
+      const job = team.jobs[key];
+      if (job) {
+        // Schedule job
+        ScheduleService.scheduleJob(job.id, job.pattern, () => {
+          job.callback && job.callback(job.bot, job.channel);
+        });
+      }
+    });
+  });
+});
 
 // @todo load jobs per team 
 
