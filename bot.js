@@ -2,7 +2,7 @@ const env = require('node-env-file');
 const MailService = require('./components/services/MailService');
 const ScheduleService = require('node-schedule');
 const YumbaBot = require('./components/entities/YumbaBot');
-const JobActions = require('../enums/jobActions');
+const JobActions = require('./components/enums/jobActions');
 
 
 try {
