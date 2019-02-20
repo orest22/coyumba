@@ -25,11 +25,10 @@ module.exports = function(controller) {
     controller.hears(['Menu'], 'direct_message,direct_mention', function(bot, message) {
 
         try {
-            bot.startTyping(message);
             ScrapingService.getMenuImage().then((screenshotName) => {
                 const link = `${process.env.URL}images/menu/${screenshotName}`;
 
-                bot.replyPrivate(message, 'Fetching image...');
+                bot.whisper(message, 'Fetching image...');
                 
                 bot.reply(message, {
                     text: null,
