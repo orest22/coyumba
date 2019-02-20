@@ -25,7 +25,7 @@ module.exports = function (controller) {
 
     controller.hears(['List'], 'direct_message,direct_mention', function (bot, message) {
 
-        bot.replyPrivate(message, {
+        bot.whisper(message, {
             text: 'Fetching menu list...'
         });
 
