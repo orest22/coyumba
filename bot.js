@@ -65,7 +65,9 @@ controller.spawn({token: process.env.bot_token, retry: true}, function(bot) {
               const callback = JobActions[job.action];
               callback({
                 bot: bot,
-                channel: job.channel
+                message: {
+                  channel: job.channel
+                }
               });
             });
           }

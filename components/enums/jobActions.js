@@ -135,7 +135,6 @@ const test = (options) => {
     debug('MESSAGE', options.message);
     const {
         bot,
-        channel,
         message
     } = options;
     const d = new Date();

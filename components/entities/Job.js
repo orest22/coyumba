@@ -1,4 +1,5 @@
 const JobActions = require('../enums/jobActions');
+const User = require('./User');
 
 /**
  * Cron Job wrapper
@@ -18,6 +19,7 @@ class Job {
         this.callback = options.callback || new Error('Callback wasn\'t set');
         this.pattern = options.pattern || new Error('Pattern wasn\'t set');
         this.action = options.action || 'No name';
+        this.user = options.user || new Error('User wasn\'t set');
     }
 
     /**
@@ -50,7 +52,8 @@ class Job {
             id: this.id,
             pattern: this.pattern,
             action: this.action,
-            channel: this.channel
+            channel: this.channel,
+            user: this.user.toJSON()
         };
     }
 
@@ -59,6 +62,11 @@ class Job {
         if(options.action) {
             const callback = JobActions[options.action];
             options.callback = callback;
+        }
+
+        // Create user
+        if(options.user) {
+            options.user = User.fromJSON(options.user);
         }
 
         const job = new Job(options);

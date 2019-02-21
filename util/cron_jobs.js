@@ -1,5 +1,6 @@
 const JobActions = require('../components/enums/jobActions');
 const Job = require('../components/entities/Job');
+const User = require('../components/entities/User');
 const TeamService = require('../components/services/TeamService');
 
 module.exports = function (jobArr, message, bot, controller, teamService) {
@@ -32,6 +33,7 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                             channel: message.channel,
                             action: action,
                             pattern: pattern,
+                            user: User.fromJson(message.user),
                             callback: () => {
                                 actionFunction({
                                     bot,
