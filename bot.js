@@ -46,6 +46,9 @@ const bot_options = {
 // Create the Botkit controller, which controls all instances of the bot.
 let controller = new YumbaBot(bot_options);
 controller.startTicking();
+const bot = controller.spawn({
+  token:  process.env.bot_token,
+});
 
 // Load all running jobs for all teams
 firebaseStorage.teams.all((error, teams) => {
@@ -55,9 +58,10 @@ firebaseStorage.teams.all((error, teams) => {
         const job = team.jobs[key];
         if (job) {
           // Schedule job
+          // @TODO bot is not available at this point
           ScheduleService.scheduleJob(job.id, job.pattern, () => {
             const callback = JobActions[job.action];
-            callback(job.bot, job.channel);
+            callback(bot, job.channel);
           });
         }
       });
