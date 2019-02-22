@@ -29,6 +29,8 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
 
                         if (!actionFunction) return false; // no action, just exit
 
+                        console.log('ADD JOB', message.user);
+
                         const job = new Job({
                             bot: bot,
                             channel: message.channel,

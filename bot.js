@@ -51,7 +51,6 @@ controller.startTicking();
 // Spawn bot on server starts
 controller.spawn({token: process.env.bot_token, retry: true}, function(bot) {
   debug('BOT SPAWNED');
-  console.log(bot);
   // Load all running jobs for all teams
   firebaseStorage.teams.all((error, teams) => {
     teams.forEach((team) => {
@@ -63,6 +62,8 @@ controller.spawn({token: process.env.bot_token, retry: true}, function(bot) {
             // @TODO bot is not available at this point
             ScheduleService.scheduleJob(job.id, job.pattern, () => {
               const callback = JobActions[job.action];
+              console.log('JOB BOT SPAWNED');
+              console.log(job);
               callback({
                 bot: bot,
                 channel: job.channel,
