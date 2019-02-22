@@ -15,7 +15,6 @@ const email = (options) => {
     const {
         bot,
         channel,
-        message
     } = options;
     const {
         storage,
@@ -135,10 +134,10 @@ const test = (options) => {
     debug('MESSAGE', options.message);
     const {
         bot,
-        message
+        channel
     } = options;
     const d = new Date();
-    bot.reply(message, {
+    bot.say(channel, {
         text: `Test job fired at ${d}`
     });
 };

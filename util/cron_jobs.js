@@ -3,6 +3,7 @@ const Job = require('../components/entities/Job');
 const User = require('../components/entities/User');
 const TeamService = require('../components/services/TeamService');
 
+
 module.exports = function (jobArr, message, bot, controller, teamService) {
     let pattern,
         action;
@@ -33,7 +34,9 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                             channel: message.channel,
                             action: action,
                             pattern: pattern,
-                            user: User.fromJSON(message.user),
+                            users: {
+                                [message.user]: User.fromJSON(message.user)
+                            },
                             callback: () => {
                                 actionFunction({
                                     bot,

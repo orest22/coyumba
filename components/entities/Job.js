@@ -1,5 +1,6 @@
 const JobActions = require('../enums/jobActions');
 const User = require('./User');
+const {arrayToJSON, jsonToArray} = require('../../util/helpers');
 
 /**
  * Cron Job wrapper
@@ -19,7 +20,7 @@ class Job {
         this.callback = options.callback || new Error('Callback wasn\'t set');
         this.pattern = options.pattern || new Error('Pattern wasn\'t set');
         this.action = options.action || 'No name';
-        this.user = options.user || new Error('User wasn\'t set');
+        this.users = options.users || new Error('User wasn\'t set');
     }
 
     /**
@@ -53,7 +54,7 @@ class Job {
             pattern: this.pattern,
             action: this.action,
             channel: this.channel,
-            user: this.user.toJSON()
+            users: arrayToJSON(this.users)
         };
     }
 
@@ -64,9 +65,9 @@ class Job {
             options.callback = callback;
         }
 
-        // Create user
-        if(options.user) {
-            options.user = User.fromJSON(options.user);
+        // Set user
+        if(options.users) {
+            options.users = jsonToArray(options.users, (user) => User.fromJSON(user));
         }
 
         const job = new Job(options);
