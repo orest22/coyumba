@@ -37,7 +37,8 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                             action: action,
                             pattern: pattern,
                             users: [User.fromJSON({
-                                id: message.user
+                                id: message.user,
+                                name: message.raw_message.user || 'Job'
                             })],
                             callback: () => {
                                 actionFunction({
