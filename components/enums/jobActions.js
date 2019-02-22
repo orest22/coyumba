@@ -137,7 +137,8 @@ const test = (options) => {
         channel
     } = options;
     const d = new Date();
-    bot.say(channel, {
+    bot.say({
+        channel,
         text: `Test job fired at ${d}`
     });
 };
