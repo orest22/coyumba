@@ -49,6 +49,8 @@ module.exports = function (jobArr, message, bot, controller, teamService) {
                             }
                         });
 
+                        console.log('job', job.toJSON());
+
                         // Add job to the team
                         teamService.addJobTo(team, job);
 
