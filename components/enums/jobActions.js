@@ -28,7 +28,6 @@ const email = (options) => {
     });
 
     debug('TeamService created', bot);
-    debug(`TeamService id ${bot.team_info.id}`);
 
     teamService.getTeamById(bot.team_info.id).then(async (team) => {
         const list = await teamService.fetchListFor(team);
@@ -80,7 +79,7 @@ const poll = (options) => {
         storage: storage,
     });
 
-    bot.botkit.debug('Team service created', bot.team_info.id);
+    bot.botkit.debug('Team service created', bot);
 
 
     teamService.getTeamById(bot.team_info.id).then(async(team) => {
