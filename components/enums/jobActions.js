@@ -27,7 +27,7 @@ const email = (options) => {
         storage: storage,
     });
 
-    debug('TeamService created');
+    debug('TeamService created', bot);
     debug(`TeamService id ${bot.team_info.id}`);
 
     teamService.getTeamById(bot.team_info.id).then(async (team) => {
@@ -137,6 +137,7 @@ const test = (options) => {
         channel
     } = options;
     const d = new Date();
+    console.log(bot);
     bot.say({
         channel,
         text: `Test job fired at ${d}`
