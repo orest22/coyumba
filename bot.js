@@ -64,6 +64,10 @@ controller.spawn({token: process.env.bot_token, retry: true}, function(bot) {
               const callback = JobActions[job.action];
               console.log('JOB BOT SPAWNED');
               console.log(job);
+
+              // Set the team info
+              bot.team_info = team;
+              
               callback({
                 bot: bot,
                 channel: job.channel,
