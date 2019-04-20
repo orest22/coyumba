@@ -68,7 +68,7 @@ class ListItem {
 
     toEmail() {
         const usersList = this.users.reduce((list, user) => list+=' '.user.name, '\n');
-        return `${this.id} | ${this.title} - ${this.users.length || 0}\n${userList}`;
+        return `${this.id} | ${this.title} - ${this.users.length || 0}\n${usersList}`;
     }
 
     /**
