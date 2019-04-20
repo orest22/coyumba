@@ -67,7 +67,8 @@ class ListItem {
     }
 
     toEmail() {
-        return `${this.id} | ${this.title} - ${this.users.length || 0}\n`;
+        const usersList = this.users.reduce((list, user) => list+=' '.user.name);
+        return `${this.id} | ${this.title} - ${this.users.length || 0}\n\n${userList}`;
     }
 
     /**

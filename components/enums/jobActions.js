@@ -1,6 +1,4 @@
 const composeAttachments = require('../../util/helpers').composeAttachments;
-const ListService = require('../services/ListService');
-const ScrapingService = require('../services/ScrapingService');
 const TeamService = require('../services/TeamService');
 const debug = require('debug')('botkit:main');
 
@@ -83,15 +81,12 @@ const poll = (options) => {
 
 
     teamService.getTeamById(bot.team_info.id).then(async(team) => {
-        bot.botkit.debug('TEAM', team);
 
         const list = await teamService.fetchListFor(team);
         let text = '';
         let actions = [];
 
         if (list && bot) {
-            bot.botkit.debug('List', list);
-
             text = list.toSlack();
 
             list.items.forEach(item => {
@@ -130,7 +125,7 @@ const poll = (options) => {
 
 const test = (options) => {
     options = options || {};
-    debug('MESSAGE', options.message);
+
     const {
         bot,
         channel

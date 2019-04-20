@@ -92,7 +92,7 @@ class ScrapingService {
                 let elements = document.querySelectorAll('#entreeMeals .meal-name span'); // Select all Products
                 const title = document.querySelector('.meals-grid-wrapper > h5');
 
-                for (let element of elements) { // Loop through each proudct
+                for (let element of elements) { // Loop through each product
                     let name = element.innerHTML;
                     items.push(name); // Push an object with the data onto our array
                 }

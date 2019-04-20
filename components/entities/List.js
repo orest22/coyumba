@@ -6,6 +6,7 @@ class List {
      * 
      * @param {Object} options
      * @param {String} options.title List title
+     * @param {Array} options.items Items
      */
     constructor(options) {
         const date = new Date();
